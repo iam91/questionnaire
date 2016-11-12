@@ -1,0 +1,205 @@
+.btn {
+  display: inline-block;
+  line-height: 1.5em;
+  height: 1.5em;
+  width: 5em;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 2px;
+  cursor: default; }
+
+.btn-default {
+  color: white;
+  background-color: #f9a646;
+  border: 1px solid #f3843e; }
+  .btn-default:hover {
+    opacity: 0.8; }
+  .btn-default:active {
+    background-color: #f3843e; }
+
+.btn-transp {
+  color: #393939;
+  background-color: white;
+  border: 1px solid #393939; }
+  .btn-transp:hover, .btn-transp:active {
+    color: white; }
+  .btn-transp:hover {
+    background-color: #393939; }
+  .btn-transp:active {
+    background-color: grey;
+    border-color: grey; }
+
+.btn-adder {
+  background-color: #dddddd;
+  border: 1px solid #aaaaaa; }
+  .btn-adder:hover {
+    opacity: 0.8; }
+  .btn-adder:active {
+    background-color: #aaaaaa; }
+
+input.q-edit {
+  outline: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1em; }
+
+body {
+  margin: 0;
+  overflow: scroll; }
+  body .q-header {
+    width: 100%;
+    height: 3em;
+    line-height: 3em;
+    padding: 0 5em;
+    box-sizing: border-box; }
+  body #app .q-back {
+    border-radius: 3px;
+    width: 60%;
+    margin: 7em auto;
+    padding: 2em; }
+  body #app a {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+
+#app .q-list-back {
+  height: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#app > div > .btn {
+  float: right; }
+
+#app table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  line-height: 3em; }
+  #app table tfoot .q-table-delete {
+    text-align: left;
+    padding: 0 1em; }
+
+#app .q-back ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+#app .q-back .q-create-head {
+  text-align: center; }
+  #app .q-back .q-create-head input.q-edit {
+    display: inline-block;
+    width: 100%;
+    font-size: 1.2em;
+    line-height: 3em;
+    height: 3em;
+    text-align: center; }
+
+#app .q-back .q-create-body {
+  margin: 2em 0;
+  padding: 0 1.5em; }
+  #app .q-back .q-create-body .q-item {
+    margin: 4em 0;
+    padding: 1em; }
+    #app .q-back .q-create-body .q-item .q-item-seq span {
+      margin-right: 1em; }
+    #app .q-back .q-create-body .q-item .q-item-body input.q-edit {
+      font-size: 1em; }
+    #app .q-back .q-create-body .q-item .q-item-body > div:first-child {
+      margin: 1em 0; }
+      #app .q-back .q-create-body .q-item .q-item-body > div:first-child span {
+        padding: 0 1em;
+        display: inline-block;
+        float: right; }
+    #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul {
+      padding: 0 5em; }
+      #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul li {
+        margin: 0.5em; }
+        #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul li * {
+          margin: 0 1em; }
+      #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul textarea {
+        outline: none;
+        width: 80%;
+        height: 10em;
+        resize: none; }
+    #app .q-back .q-create-body .q-item .q-item-ctrl {
+      text-align: right; }
+      #app .q-back .q-create-body .q-item .q-item-ctrl a {
+        padding: 0 0.5em; }
+  #app .q-back .q-create-body .q-adder {
+    position: relative;
+    overflow: hidden;
+    margin: 1.5em 0;
+    height: 5em;
+    transition: height 0.2s linear; }
+    #app .q-back .q-create-body .q-adder ul {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      height: 0;
+      text-align: center;
+      line-height: 5em; }
+      #app .q-back .q-create-body .q-adder ul li {
+        display: inline-block;
+        margin: 0 1em; }
+    #app .q-back .q-create-body .q-adder div {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      height: 5em;
+      line-height: 5em; }
+  #app .q-back .q-create-body .q-adder:hover {
+    height: 10em; }
+
+#app .q-back .q-create-foot {
+  overflow: hidden; }
+  #app .q-back .q-create-foot div {
+    display: inline-block; }
+  #app .q-back .q-create-foot a.btn {
+    float: right;
+    margin-left: 0.5em; }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, "microsoft yahei ui", "microsoft yahei", "simhei", Arial, sans-serif;
+  font-weight: lighter;
+  background-color: #ebe3e0; }
+  body .q-header {
+    color: white;
+    background-color: #f9a646;
+    box-shadow: 0 0 1px 1px grey; }
+  body .q-back-white {
+    background-color: white;
+    box-shadow: 0 0 1px 1px grey; }
+
+#app table {
+  font-weight: lighter;
+  color: #393939; }
+  #app table tbody {
+    border-radius: 2px;
+    background-color: white; }
+    #app table tbody tr {
+      border-bottom: 1px solid grey; }
+      #app table tbody tr:hover {
+        background-color: #edd5d1; }
+    #app table tbody td.q-pending {
+      color: #66DD00; }
+
+#app .q-back .q-create-head input.q-edit:hover {
+  background-color: #edd5d1; }
+
+#app .q-back .q-create-body {
+  border-top: 3px solid #aaaaaa;
+  border-bottom: 3px solid #aaaaaa; }
+  #app .q-back .q-create-body .q-item:hover {
+    background-color: #edd5d1; }
+    #app .q-back .q-create-body .q-item:hover .q-edit {
+      background-color: #edd5d1; }
+  #app .q-back .q-create-body .q-adder {
+    border: 1px solid #aaaaaa; }
+    #app .q-back .q-create-body .q-adder div {
+      background-color: #dddddd; }

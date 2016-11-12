@@ -38,24 +38,30 @@ define(['jquery', 'app/qlist/qtable'], function($, qtable){
 
 		var createBtn = $(document.createElement('a'))
 							.html('新建问卷')
-							.attr('href', '#qcreate');
+							.attr('href', '#qcreate')
+							.addClass('btn btn-default');
 
 		if(qnairs.length){
 			//questionnairs exist
+
+			var back = document.createElement('div');
 
 			var list = qtable.create(_$globalStorage)
 							 .setData(qnairs, title, titleMap)
 							 .getElem();
 
-			$(_$root).append(createBtn)
-					.append(list);
+			$(back).addClass('q-back')
+				   .append(createBtn)
+				   .append(list)
+				   .appendTo(_$root);
 
 		}else{
 			//no questionnair
 
 			var back = document.createElement('div');
 
-			$(back).append(createBtn)
+			$(back).addClass('q-back q-back-white q-list-back')
+				   .append(createBtn)
 				   .appendTo(_$root);
 		}
 	}

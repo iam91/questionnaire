@@ -1,0 +1,29 @@
+#app{
+
+	.q-list-back{
+		height: 40%;
+		display: flex;
+		align-items: center;
+    	justify-content: center;
+	}
+
+	& > div {
+			& > .btn{
+			float: right;
+		}
+	}
+
+	table{
+		width: 100%;
+		text-align: center;
+		border-collapse: collapse;
+		line-height: 3em;
+
+		tfoot{
+			.q-table-delete{
+				text-align: left;
+				padding: 0 1em;
+			}
+		}
+	}
+}

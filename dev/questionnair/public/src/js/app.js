@@ -26,7 +26,8 @@ define(['jquery', 'app/qcreate/ctrl',
 
 	//register pages
 	var route = {
-		'default' : qlist,
+		//'default' : qlist,
+		'default' : qcreate,
 		'qlist'   : qlist,
 		'qcreate' : qcreate,
 		'qdata'   : qdata

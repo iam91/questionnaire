@@ -17,16 +17,20 @@ define(['jquery', 'app/qcreate/qcreator'], function($, qcreator){
 		var qTitle = null;
 		var qs = [];
 
-		var back = document.createElement('article');
+		var back = document.createElement('div');
 
-		var qhead = $(document.createElement('header')).html('<input type="text">')
-													   .children()
-													   .val(qTitle || '这里是标题')
-													   .parent();
+		var qhead = $(document.createElement('div')).addClass('q-create-head')
+													.html('<input class="q-edit" type="text" placeholder="这里是标题">')
+												   	.children()
+												   	.val(qTitle || '')
+												   	.parent();
 
 		
-		var qfoot = document.createElement('footer');
-		$(qfoot).html('<span>问卷截止日期</span><div></div><a href="#qlist">保存问卷</a><a>发布问卷</a>');
+		var qfoot = document.createElement('div');
+		$(qfoot).addClass('q-create-foot')
+				.html('<span>问卷截止日期</span><div></div>' + 
+					  '<a class="btn btn-default">发布问卷</a>' + 
+					  '<a class="btn btn-transp" href="#qlist">保存问卷</a>');
 
 		var creator = qcreator.create()
 							  .getElem();
@@ -36,7 +40,8 @@ define(['jquery', 'app/qcreate/qcreator'], function($, qcreator){
 
 		}
 
-		$(back).append(qhead)
+		$(back).addClass('q-back q-back-white')
+			   .append(qhead)
 			   .append(creator)
 			   .append(qfoot)
 			   .appendTo(_$root);

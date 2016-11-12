@@ -1,0 +1,34 @@
+#app{
+
+	.q-back{
+
+		.q-create-head{
+			input.q-edit:hover{
+					background-color: $hover-color;
+				}
+			}
+
+		.q-create-body{
+			border-top: 3px solid $adder-color-dark;
+			border-bottom: 3px solid $adder-color-dark;
+
+
+			.q-item{
+
+				&:hover{
+					background-color: $hover-color;
+					.q-edit{
+						background-color: $hover-color;
+					}
+				}
+			}
+
+			.q-adder{
+				border: 1px solid $adder-color-dark;
+				div{
+					background-color: $adder-color;
+				}
+			}
+		}
+	}
+}

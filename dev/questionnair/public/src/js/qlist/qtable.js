@@ -1,23 +1,31 @@
 define(['jquery'], function($){
 
-	var theadHead = '<td></td>';
-	var theadTail = '<td>状态</td><td>操作</td>';
-
-	var thead = '<td></td>' + 
+	var thead = '<tr><td></td>' + 
 				'{title}' + 
 				'<td>状态</td>' + 
-				'<td>操作</td>';
-
-	var tbodyHead = '<td><input type="checkbox"></td>';
-	var tbodyTail = '<td><a name="qcreate">编辑</a></td><td><a>删除</a></td>';
+				'<td>操作</td></tr>';
 
 	var trow = '<td><input type="checkbox"></td>' + 
 			   '{val}' + 
-			   '<td><a name="qcreate">编辑</a></td>' + 
-			   '<td><a>删除</a></td>' + 
-			   '<td><a name="{name}">{btn}</a></td>';
+			   '<td><a class="btn btn-transp" name="qcreate">编辑</a></td>' + 
+			   '<td><a class="btn btn-transp">删除</a></td>' + 
+			   '<td><a class="btn btn-transp" name="{name}">{btn}</a></td>';
 
-	var tfootTemplate = '<td><input type="checkbox"><span>全选</span><a>删除</a></td>';
+	var tfootTemplate = '<td>' + 
+							'<input type="checkbox">' + 
+						'</td>' + 
+						'<td>' + 
+							'<span>全选</span>' + 
+						'</td>' + 
+						'<td class="q-table-delete">' + 
+							'<a class="btn btn-transp">删除</a>' + 
+						'</td>';
+
+	var status = {
+		'0': '未发布',
+		'1': '发布中',
+		'2': '已发布'
+	}
 
 	function Qtable($globalStorage){
 
@@ -51,7 +59,7 @@ define(['jquery'], function($){
 		for(var i = 0; i < title.length; i++){
 			head += '<td>' + titleMap[title[i]] + '</td>';
 		}
-		$(this._thead).html(thead.replace('{title}', thead));
+		$(this._thead).html(thead.replace('{title}', head));
 
 
 		for(var i = 0; i < data.length; i++){
@@ -63,9 +71,13 @@ define(['jquery'], function($){
 				t += '<td>' + data[i][title[j]] + '</td>';
 			}
 
+			var statusCode = data[i].status;
+
+			t += (statusCode == 1 ? '<td class="q-pending">' : '<td>') + status[statusCode] + '</td>';
+
 			$(row).html(trow.replace('{val}', t)
-							.replace('{name}', data[i]['status'] == 0 ? 'qcreate' : 'qdata')
-							.replace('{btn}', data[i]['status'] == 0 ? '查看问卷' : '查看数据'))
+							.replace('{name}', statusCode == 0 ? 'qcreate' : 'qdata')
+							.replace('{btn}', statusCode == 0 ? '查看问卷' : '查看数据'))
 				  .on('click', 'a', {index: i, that: this}, (function(fn){
 
 				  	  return function(e){

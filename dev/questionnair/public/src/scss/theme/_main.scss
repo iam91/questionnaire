@@ -1,0 +1,16 @@
+body{
+	font-family: $font-stack;
+	font-weight: lighter;
+	background-color: $back-color;
+	
+	.q-header{
+		color: white;
+		background-color: $theme-color;
+		box-shadow: $theme-shadow;
+	}
+	
+	.q-back-white{
+		background-color: white;
+		box-shadow: $theme-shadow;
+	}
+}

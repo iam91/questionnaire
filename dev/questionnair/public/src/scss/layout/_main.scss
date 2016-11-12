@@ -1,0 +1,28 @@
+body{
+	margin: 0;
+	overflow: scroll;
+	
+	.q-header{
+		width: 100%;
+		height: $q-head-height;
+		line-height: $q-head-height;
+		padding: 0 5em;
+		box-sizing: border-box;
+	}
+
+	#app{
+		.q-back{
+			border-radius: 3px;
+			width: 60%;
+			margin: 7em auto;
+			padding: 2em;
+		}
+
+		a{
+			-webkit-user-select: none;
+			   -moz-user-select: none;
+			    -ms-user-select: none;
+			        user-select: none;
+		}
+	}
+}

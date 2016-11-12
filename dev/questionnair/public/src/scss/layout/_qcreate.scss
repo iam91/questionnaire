@@ -1,0 +1,121 @@
+#app{
+
+	.q-back{
+		ul{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.q-create-head{
+			text-align: center;
+			input.q-edit{
+				display: inline-block;
+				width: 100%;
+				font-size: 1.2em;
+				line-height: 3em;
+				height: 3em;
+				text-align: center;
+			}
+		}
+
+		.q-create-body{
+			margin: 2em 0;
+			padding: 0 1.5em;
+
+			.q-item{
+				margin: 4em 0;
+				padding: 1em;
+				.q-item-seq span{
+					margin-right: 1em;
+				}
+				.q-item-body{
+
+					input.q-edit{
+						font-size: 1em;
+					}
+
+					&>div:first-child{
+						margin: 1em 0;
+						span{
+							padding: 0 1em;
+							display: inline-block;
+							float: right;
+						}
+					}
+					&>div:last-child{
+						ul{
+							padding: 0 5em;
+							li{
+								margin: 0.5em;
+								*{
+									margin: 0 1em;
+								}
+							}
+								
+							textarea{
+								outline: none;
+								width: 80%;
+								height: 10em;
+								resize: none;
+							}
+						}
+					}
+				}
+
+				.q-item-ctrl{
+					text-align: right;
+					a{
+						padding: 0 0.5em;
+					}
+				}
+			}
+
+			.q-adder{
+				position: relative;
+				overflow: hidden;
+				margin: 1.5em 0;
+				height: $adder-height;
+				transition: height 0.2s linear;
+				ul{
+					position: absolute;
+					top: 0;
+					width: 100%;
+					margin: 0;
+					padding: 0;
+					height: 0;
+					text-align: center;
+					line-height: $adder-height;
+					li{
+						display: inline-block;
+						margin: 0 1em;
+					}
+				}
+
+				div{
+					position: absolute;
+					bottom: 0;
+					width: 100%;
+					text-align: center;
+					height: $adder-height;
+					line-height: $adder-height;
+				}
+			}
+
+			.q-adder:hover{
+				height: 2 * $adder-height;
+			}
+		}
+
+		.q-create-foot{
+			overflow: hidden;
+			div{
+				display: inline-block;
+			}
+			a.btn{
+				float: right;
+				margin-left: 0.5em;
+			}
+		}
+	}
+}

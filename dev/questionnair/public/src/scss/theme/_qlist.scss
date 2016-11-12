@@ -1,0 +1,22 @@
+#app{
+
+	table{
+		font-weight: lighter;
+		color: $font-color;
+		tbody{
+			border-radius: 2px;
+			background-color: white;
+
+			tr{
+				border-bottom: 1px solid grey;
+				&:hover{
+					background-color: $hover-color;
+				}
+			}
+
+			td.q-pending{
+				color: #66DD00;
+			}
+		}
+	}
+}

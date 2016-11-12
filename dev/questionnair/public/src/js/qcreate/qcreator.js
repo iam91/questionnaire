@@ -10,26 +10,31 @@ define(['jquery'], function($){
 
 	var adderTemplate = '<ul>';
 	for(var type in Qtype){
-		adderTemplate += '<li><a name="' + type + '">' + Qtype[type] + '</a></li>';
+		adderTemplate += '<li><a class="btn btn-adder" name="' + type + '">' + Qtype[type] + '</a></li>';
 	}
-	adderTemplate += '</ul>';
+	adderTemplate += '</ul><div>添加问题</div>';
 
-	var contentTemplate = '<div>{type}</div>' + 
-						  '<div><input type="text" value="{title}"><span>{ctrl}</span></div>' + 
-						  '<ul></ul>';
+	var seqTemplate = '<span>{seq}</span><span>{type}</span>';
+
+	var contentTemplate = '<div><input class="q-edit" type="text" value="{title}" placeholder="这里是标题"><span>{ctrl}</span></div>' + 
+						  '<div><ul></ul></div>';
 
 	var questCtrl = '<input type="checkbox"><label>此题是否必填</label>';
-	var selectCtrl = '<a name="addopt">add</a><a name="sortopt">sort</a>';
+	var selectCtrl = '<a name="addopt">+</a>';
 
-	var optTemplate = '<input type="checkbox"><input type="text" value={}><a name="delopt">delete</a>';
+	var optTemplate = '<input type="{type}" name="{single}"><input class="q-edit" type="text" value="{opt}" placeholder="请输入选项"><a name="delopt">&times;</a>';
 
 	function Qcreator(){
 
-		this._base = document.createElement('section');
+		this._base = document.createElement('div');
 		this._adder = document.createElement('div');
 
-		$(this._adder).html(adderTemplate).appendTo(this._base);
-		$(this._base).on('click', 'a', {that: this}, function(e){
+		$(this._adder).addClass('q-adder')
+					  .html(adderTemplate)
+					  .appendTo(this._base);
+
+		$(this._base).addClass('q-create-body')
+					 .on('click', 'a', {that: this}, function(e){
 
 			var that = e.data.that;
 			var target = e.target;
@@ -84,7 +89,7 @@ define(['jquery'], function($){
 			var currSeq = $(next).data('seq');
 
 			$(next).data('seq', currSeq - 1)
-				   .children('.q-seq')
+				   .find('.q-item-seq>span:first-child')
 				   .html(currSeq - 1);
 			
 			curr = next;
@@ -101,11 +106,11 @@ define(['jquery'], function($){
 			$(q).detach()
 				.insertBefore(prev)
 				.data('seq', seq - 1)
-				.children('.q-seq')
+				.find('.q-item-seq>span:first-child')
 				.html(seq - 1);
 			
 			$(prev).data('seq', seq)
-				   .children('.q-seq')
+				   .find('.q-item-seq>span:first-child')
 				   .html(seq);
 		}
 	};
@@ -118,11 +123,11 @@ define(['jquery'], function($){
 			$(q).detach()
 				.insertAfter(next)
 				.data('seq', seq + 1)
-				.children('.q-seq')
+				.find('.q-item-seq>span:first-child')
 				.html(seq + 1);
 
 			$(next).data('seq', seq)
-				   .children('.q-seq')
+				   .find('.q-item-seq>span:first-child')
 				   .html(seq);
 		}
 	};
@@ -131,12 +136,13 @@ define(['jquery'], function($){
 		//@todo handle q
 		var newq = $(q).clone(true).insertAfter(q);
 		var curr = q;
+
 		while($(curr).next().length){
 			var next = $(curr).next();
 			var currSeq = $(next).data('seq');
 
 			$(next).data('seq', currSeq + 1)
-				   .children('.q-seq')
+				   .find('.q-item-seq>span:first-child')
 				   .html(currSeq + 1);
 
 			curr = next;
@@ -151,12 +157,15 @@ define(['jquery'], function($){
 		$(q).data('seq', seq);
 
 		var num = document.createElement('div');
-		$(num).html(seq).addClass('q-seq');
+		$(num).addClass('q-item-seq')
+			  .html(seqTemplate.replace('{seq}', seq)
+							   .replace('{type}', Qtype[type]));
 
 		var content = (new QContent(type, data)).getElem();
 
 		var ctrl = document.createElement('div');
-		$(ctrl).html(ctrlTemplate);
+		$(ctrl).addClass('q-item-ctrl')
+			   .html(ctrlTemplate);
 
 		if(data){
 
@@ -164,7 +173,8 @@ define(['jquery'], function($){
 
 		}
 
-		$(q).append(num)
+		$(q).addClass('q-item')
+			.append(num)
 			.append(content)
 			.append(ctrl)
 			.insertBefore(this._adder);
@@ -181,12 +191,11 @@ define(['jquery'], function($){
 
 		this._base = document.createElement('div');
 
-		$(this._base)
-			.html(contentTemplate.replace('{type}', Qtype[type])
-								 .replace('{title}', data && data.title || '这里是标题')
-								 .replace('{ctrl}', type === 'quest' ? questCtrl :  selectCtrl));
+		$(this._base).addClass('q-item-body')
+					 .html(contentTemplate.replace('{title}', data && data.title || '')
+								 		  .replace('{ctrl}', type === 'quest' ? questCtrl :  selectCtrl));
 
-		this._contentBody = $(this._base).children('ul');
+		this._contentBody = $(this._base).find('ul');
 
 		$(this._base).on('click', {that: this}, function(e){
 
@@ -195,15 +204,17 @@ define(['jquery'], function($){
 
 			if(name === 'addopt'){
 
-				var opt = document.createElement('div');
-				$(opt).html(optTemplate.replace('{}', '请输入选项'))
+				var opt = document.createElement('li');
+				$(opt).html(optTemplate.replace('{opt}', data || '')
+									   .replace('{type}', type === 'singl' ? 'radio' : 'checkbox')
+									   .replace('{single}', type === 'singl' ? 'single' : ''))
 					  .appendTo(that._contentBody);
 
 			}else if(name === 'delopt'){
 				
 				$(e.target).parent()
-					   .empty()
-					   .remove();
+						   .empty()
+						   .remove();
 					   
 			}
 		});

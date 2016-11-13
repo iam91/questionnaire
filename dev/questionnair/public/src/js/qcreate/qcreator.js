@@ -234,8 +234,10 @@ define(['jquery'], function($){
 			}
 
 		}else if(type === 2){
-			//if(data){}
-			$(this._contentBody).html('<textarea></textarea>');
+			
+			var text = document.createElement('textarea');
+			$(text).val(data && data.content.text || '')
+				   .appendTo(this._contentBody);
 		}
 	}
 

@@ -7,6 +7,7 @@
 	text-decoration: none;
 	border-radius: 2px;
 	cursor: default;
+	transition: background-color 0.2s linear, opacity 0.2s linear;
 }
 
 .btn-default{

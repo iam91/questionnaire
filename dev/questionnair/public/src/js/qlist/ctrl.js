@@ -1,20 +1,65 @@
 define(['jquery', 'app/qlist/qtable'], function($, qtable){
 
-	//// mock ////
-	function query(){
-		var data = [];
-		for(var i = 0; i < 4; i++){
-			var d = {
-				id:         i, 
-				title:      'q' + i,
-				createTime: new Date(),
-				status:     i > 2 ? 2 : i
-			};
-			data.push(d);
-		}
-		return data;
+	//render functions
+	function hasQnair(data){
+
+		var createBtn = $(document.createElement('a'))
+							.html('新建问卷')
+							.attr('name', 'qcreate')
+							.addClass('btn btn-default')
+							.on('click', function(e){
+								_$globalStorage.currq = null;
+								location.hash = '#' + e.target.name;
+							});
+
+		var back = document.createElement('div');
+		var list = qtable.create(_$globalStorage)
+						 .setData(data, title, titleMap)
+						 .getElem();
+
+		$(back).addClass('q-back')
+			   .append(createBtn)
+			   .append(list)
+			   .appendTo(_$root);
 	}
 
+	function noQnair(){
+		var createBtn = $(document.createElement('a'))
+							.html('新建问卷')
+							.attr('name', 'qcreate')
+							.addClass('btn btn-default')
+							.on('click', function(e){
+								_$globalStorage.currq = null;
+								location.hash = '#' + e.target.name;
+							});
+
+		var back = document.createElement('div');
+
+		$(back).addClass('q-back q-back-white q-list-back')
+			   .append(createBtn)
+			   .appendTo(_$root);
+	}
+
+	//query	
+	function query(){
+
+		$.ajax('/qnair', {
+
+			dataType: 'json',
+			method: 'GET'
+		
+		}).done(function(data){
+		 	
+		 	if(data && data.length){
+		 		hasQnair(data);
+		 	}else{
+		 		noQnair();
+		 	}
+
+		}).fail(noQnair);
+	}
+
+	//meta data for model
 	var title = [
 		'title',
 		'createTime'
@@ -24,7 +69,7 @@ define(['jquery', 'app/qlist/qtable'], function($, qtable){
 		'title'     : '标题',
 		'createTime': '时间'
 	};
-	//////////////
+
 
 	var _$root = null;
 	var _$globalStorage = null;
@@ -34,36 +79,7 @@ define(['jquery', 'app/qlist/qtable'], function($, qtable){
 		_$root = $root;
 		_$globalStorage = $globalStorage;
 
-		var qnairs = query();
-
-		var createBtn = $(document.createElement('a'))
-							.html('新建问卷')
-							.attr('href', '#qcreate')
-							.addClass('btn btn-default');
-
-		if(qnairs.length){
-			//questionnairs exist
-
-			var back = document.createElement('div');
-
-			var list = qtable.create(_$globalStorage)
-							 .setData(qnairs, title, titleMap)
-							 .getElem();
-
-			$(back).addClass('q-back')
-				   .append(createBtn)
-				   .append(list)
-				   .appendTo(_$root);
-
-		}else{
-			//no questionnair
-
-			var back = document.createElement('div');
-
-			$(back).addClass('q-back q-back-white q-list-back')
-				   .append(createBtn)
-				   .appendTo(_$root);
-		}
+		query();
 	}
 
 	function destroy(){

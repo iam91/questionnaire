@@ -40,6 +40,7 @@ define(['jquery'], function($){
 	}
 
 	Qtable.prototype._opHandler = function(e){
+		
 		this.$globalStorage['currq'] = this._q[e.data.index];
 		location.hash = '#' + e.target.name;
 	};

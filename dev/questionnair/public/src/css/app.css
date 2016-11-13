@@ -6,7 +6,8 @@
   text-align: center;
   text-decoration: none;
   border-radius: 2px;
-  cursor: default; }
+  cursor: default;
+  transition: background-color 0.2s linear, opacity 0.2s linear; }
 
 .btn-default {
   color: white;
@@ -42,12 +43,15 @@ input.q-edit {
   border: none;
   margin: 0;
   padding: 0;
-  line-height: 1em; }
+  line-height: 1em;
+  background-color: transparent; }
 
 body {
   margin: 0;
   overflow: scroll; }
   body .q-header {
+    position: fixed;
+    top: 0;
     width: 100%;
     height: 3em;
     line-height: 3em;
@@ -106,7 +110,8 @@ body {
     #app .q-back .q-create-body .q-item .q-item-seq span {
       margin-right: 1em; }
     #app .q-back .q-create-body .q-item .q-item-body input.q-edit {
-      font-size: 1em; }
+      font-size: 1em;
+      height: 1.5em; }
     #app .q-back .q-create-body .q-item .q-item-body > div:first-child {
       margin: 1em 0; }
       #app .q-back .q-create-body .q-item .q-item-body > div:first-child span {

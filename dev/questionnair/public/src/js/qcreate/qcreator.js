@@ -1,28 +1,38 @@
 define(['jquery'], function($){
 
-	var Qtype = {
-		'singl': '单选题',
-		'multi': '多选题',
-		'quest': '文本题'
-	};
+	var Qtype = ['单选题','多选题','文本题'];
 
-	var ctrlTemplate = '<a name="up">上移</a><a name="down">下移</a><a name="clone">复用</a><a name="del">删除</a>';
+	var ctrlTemplate = '<a name="up">上移</a>' + 
+					   '<a name="down">下移</a>' + 
+					   '<a name="clone">复用</a>' + 
+					   '<a name="del">删除</a>';
 
-	var adderTemplate = '<ul>';
-	for(var type in Qtype){
-		adderTemplate += '<li><a class="btn btn-adder" name="' + type + '">' + Qtype[type] + '</a></li>';
+	var adderTemplate = '';
+	for(var i = 0; i < Qtype.length; i++){
+		adderTemplate += '<li>' + 
+						     '<a class="btn btn-adder" name="' + i + '">' + Qtype[i] + '</a>' + 
+						 '</li>';
 	}
-	adderTemplate += '</ul><div>添加问题</div>';
+	adderTemplate = '<ul>' + 
+						adderTemplate + 
+					'</ul>' + 
+					'<div>+  添加问题</div>';
 
-	var seqTemplate = '<span>{seq}</span><span>{type}</span>';
+	var seqTemplate = '<span>{seq}</span>' + 
+					  '<span>{type}</span>';
 
-	var contentTemplate = '<div><input class="q-edit" type="text" value="{title}" placeholder="这里是标题"><span>{ctrl}</span></div>' + 
+	var contentTemplate = '<div>' + 
+						      '<input class="q-edit" type="text" value="{title}" placeholder="这里是标题">' + 
+						      '<span>{ctrl}</span>' + 
+						  '</div>' + 
 						  '<div><ul></ul></div>';
 
 	var questCtrl = '<input type="checkbox"><label>此题是否必填</label>';
 	var selectCtrl = '<a name="addopt">+</a>';
 
-	var optTemplate = '<input type="{type}" name="{single}"><input class="q-edit" type="text" value="{opt}" placeholder="请输入选项"><a name="delopt">&times;</a>';
+	var optTemplate = '<input type="{type}" name="{single}">' + 
+					  '<input class="q-edit" type="text" value="{opt}" placeholder="请输入选项">' + 
+					  '<a name="delopt">&times;</a>';
 
 	function Qcreator(){
 
@@ -54,34 +64,34 @@ define(['jquery'], function($){
 
 				that['_' + name].call(that, q, seq);
 
-			}else if(name === 'singl'
-				  || name === 'multi'
-				  || name === 'quest'){
+			}else if(name === '0'
+				  || name === '1'
+				  || name === '2'){
 
-				that._createQ(name);
-
+				that._createQ(parseInt(name));
 			}
 
 		});
-
-		this._q = [];
 	}
 
 	Qcreator.prototype.addQ = function(q){
+		if(!q){
+			return this;
+		}
 
 		if(!q instanceof Array){
-			this.addQ([q]);
-			return;
+			return this.addQ([q]);
 		}else{
 			for(var i = 0; i < q.length; i++){
-				//questions
+				this._createQ(q[i].type, q[i], i);
 			}
 		}
+
+		return this;
 	};
 
 	Qcreator.prototype._del = function(q, seq){
 		//@todo handle q
-		this._q.splice(seq - 1, 1);
 
 		var curr = q;
 		while($(curr).next().length){
@@ -100,7 +110,7 @@ define(['jquery'], function($){
 
 	Qcreator.prototype._up = function(q, seq){
 		//@todo handle q
-		if(seq > 1){
+		if(seq > 0){
 			var prev = $(q).prev();
 
 			$(q).detach()
@@ -117,7 +127,7 @@ define(['jquery'], function($){
 
 	Qcreator.prototype._down = function(q, seq){
 		//@todo handle q
-		if(seq < this._q.length){
+		if(seq < this._base.children.length - 1){
 			var next = $(q).next();
 
 			$(q).detach()
@@ -149,37 +159,33 @@ define(['jquery'], function($){
 		}
 	};
 
-	Qcreator.prototype._createQ = function(type, data){
+	Qcreator.prototype._createQ = function(type, data, index){
 
-		var seq = this._q.length + 1;
+		var seq = index !== undefined ? index : this._base.children.length;
 		
 		var q = document.createElement('div');
 		$(q).data('seq', seq);
 
+		//sequential number part
 		var num = document.createElement('div');
 		$(num).addClass('q-item-seq')
 			  .html(seqTemplate.replace('{seq}', seq)
 							   .replace('{type}', Qtype[type]));
 
+		//content part
 		var content = (new QContent(type, data)).getElem();
 
+		//controll part
 		var ctrl = document.createElement('div');
 		$(ctrl).addClass('q-item-ctrl')
 			   .html(ctrlTemplate);
 
-		if(data){
-
-		}else{
-
-		}
-
+		//assemble
 		$(q).addClass('q-item')
 			.append(num)
 			.append(content)
 			.append(ctrl)
 			.insertBefore(this._adder);
-
-		this._q.push(q);
 	};
 
 	Qcreator.prototype.getElem = function(){
@@ -204,11 +210,7 @@ define(['jquery'], function($){
 
 			if(name === 'addopt'){
 
-				var opt = document.createElement('li');
-				$(opt).html(optTemplate.replace('{opt}', data || '')
-									   .replace('{type}', type === 'singl' ? 'radio' : 'checkbox')
-									   .replace('{single}', type === 'singl' ? 'single' : ''))
-					  .appendTo(that._contentBody);
+				this._createOpt(type, '');
 
 			}else if(name === 'delopt'){
 				
@@ -219,14 +221,31 @@ define(['jquery'], function($){
 			}
 		});
 
-		if(type === 'single'){
-			$(this._contentBody).html();
-		}else if(type === 'multi'){
+		if(type === 0 && data){
 
-		}else if(type === 'quest'){
+			for(var i = 0; i < data.content.opts.length; i++){
+				this._createOpt(type, data.content.opts[i].des);
+			}
+
+		}else if(type === 1 && data){
+
+			for(var i = 0; i < data.content.opts.length; i++){
+				this._createOpt(type, data.content.opts[i].des);
+			}
+
+		}else if(type === 2){
+			//if(data){}
 			$(this._contentBody).html('<textarea></textarea>');
 		}
 	}
+
+	QContent.prototype._createOpt = function(type, opt){
+		var optElem = document.createElement('li');
+		$(optElem).html(optTemplate.replace('{opt}', opt)
+							   .replace('{type}', type === 0 ? 'radio' : 'checkbox')
+							   .replace('{single}', type === 0 ? 'single' : ''))
+			  .appendTo(this._contentBody);
+	};
 
 	QContent.prototype.getElem = function(){
 		return this._base;

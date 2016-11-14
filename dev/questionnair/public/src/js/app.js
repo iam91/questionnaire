@@ -10,9 +10,11 @@ requirejs.config({
 
 define(['jquery', 'app/qcreate/ctrl', 
 				  'app/qlist/ctrl', 
-				  'app/qdata/ctrl'], function($, qcreate, 
+				  'app/qdata/ctrl',
+				  'app/qfill/ctrl'], function($, qcreate, 
 				  								 qlist, 
-				  								 qdata){
+				  								 qdata,
+				  								 qfill){
 
 	var $globalStorage = {};
 	var $root = $('#app');
@@ -30,7 +32,8 @@ define(['jquery', 'app/qcreate/ctrl',
 		//'default' : qcreate,
 		'qlist'   : qlist,
 		'qcreate' : qcreate,
-		'qdata'   : qdata
+		'qdata'   : qdata,
+		'qfill'   : qfill,
 	};
 
 	/** procedure **/

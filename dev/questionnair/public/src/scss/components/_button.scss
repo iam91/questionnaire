@@ -10,32 +10,24 @@
 	transition: background-color 0.2s linear, opacity 0.2s linear;
 }
 
-.btn-default{
+.btn-enable{
 	color: white;
 	background-color: $theme-color;
 	border: 1px solid $theme-color-dark;
+	transition: background-color 0.2s liear;
 	&:hover{
-		opacity: 0.8;
+		background-color: white;
+		color: $font-color;
 	}
 	&:active{
 		background-color: $theme-color-dark;
 	}
 }
 
-.btn-transp{
+.btn-disable{
 	color: $font-color;
 	background-color: white;
 	border: 1px solid $font-color;
-	&:hover, &:active{
-		color: white;
-	}
-	&:hover{
-		background-color: $font-color;
-	}
-	&:active{
-		background-color: grey;
-		border-color: grey;
-	}
 }
 
 .btn-adder{

@@ -9,10 +9,8 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		var back = document.createElement('div');
 		//questionnair head
 		var qhead = $(document.createElement('div')).addClass('q-detail-head')
-													.html('<input class="q-edit" type="text" placeholder="这里是标题">')
-												   	.children()
-												   	.val(data && data.title || '')
-												   	.parent();
+													.html('<span>' + data.title + '</span>');
+												   	
 
 		//questionnair foot
 		var qfoot = document.createElement('div');
@@ -23,7 +21,7 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 				});
 
 		//questionnair body
-		var qbdy = qbody.create(data, true)
+		var qbdy = qbody.create(data, false)
 							  .getElem();
 
 		$(back).addClass('q-back q-back-white')
@@ -37,8 +35,9 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		renderQnair(data[0]);
 	}
 
-	function newQnair(){
-		renderQnair();
+	function noQnair(){
+		var back = document.createElement('div');
+		$(back).addClass('q-back q-back-white').html('<span>Oops!</span>');
 	}
 
 	//query
@@ -49,7 +48,7 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 			dataType: 'json',
 			method: 'GET'
 
-		}).done(existQnair).fail(newQnair);
+		}).done(existQnair).fail(noQnair);
 	}
 
 	var _$root = null;
@@ -63,9 +62,6 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		var qid = _$globalStorage.qid;
 		if(qid){
 			query(qid);
-		}else{
-			//new questionnair
-			newQnair();
 		}
 	}
 

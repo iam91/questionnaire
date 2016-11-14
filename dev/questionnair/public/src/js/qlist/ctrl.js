@@ -1,4 +1,4 @@
-define(['jquery', 'app/qlist/qtable'], function($, qtable){
+define(['jquery', 'app/components/qtable'], function($, qtable){
 
 	//render functions
 	function hasQnair(data){
@@ -6,9 +6,9 @@ define(['jquery', 'app/qlist/qtable'], function($, qtable){
 		var createBtn = $(document.createElement('a'))
 							.html('新建问卷')
 							.attr('name', 'qcreate')
-							.addClass('btn btn-default')
+							.addClass('btn btn-enable')
 							.on('click', function(e){
-								_$globalStorage.currq = null;
+								_$globalStorage.qid = null;
 								location.hash = '#' + e.target.name;
 							});
 
@@ -27,10 +27,11 @@ define(['jquery', 'app/qlist/qtable'], function($, qtable){
 		var createBtn = $(document.createElement('a'))
 							.html('新建问卷')
 							.attr('name', 'qcreate')
-							.addClass('btn btn-default')
+							.addClass('btn btn-enable')
 							.on('click', function(e){
-								_$globalStorage.currq = null;
+								_$globalStorage.qid = null;
 								location.hash = '#' + e.target.name;
+
 							});
 
 		var back = document.createElement('div');

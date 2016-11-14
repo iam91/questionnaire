@@ -4,15 +4,15 @@ var ObjectID = require('mongodb').ObjectID;
 function Qnair(qnair){
 }
 
-Qnair.prototype.getWhole = function(qid, callback){
-	this._get(qid, callback, true);
+Qnair.prototype.getAll = function(callback){
+	this._get(callback);
 };
 
-Qnair.prototype.getBrief = function(qid, callback){
-	this._get(qid, callback, false);
+Qnair.prototype.getById = function(callback, qid){
+	this._get(callback, qid, true);
 };
 
-Qnair.prototype._get = function(qid, callback, isWhole){
+Qnair.prototype._get = function(callback, qid, detail){
 
     mongodb.open(function(err, db){
 
@@ -29,7 +29,10 @@ Qnair.prototype._get = function(qid, callback, isWhole){
 	    	}
 
 	    	var cond = qid ? {_id: new ObjectID(qid)} : {};
-	    	var proj = isWhole ? {} : {items: false};
+	    	var proj = detail ? {} : {items: false};
+
+	    	console.log(cond);
+	    	console.log(proj);
 
 		    collection.find(cond, proj).toArray(function(err, doc){
 		    	mongodb.close();
@@ -41,7 +44,6 @@ Qnair.prototype._get = function(qid, callback, isWhole){
 		    });
 		});
     });
-
 };
 
 module.exports = new Qnair();

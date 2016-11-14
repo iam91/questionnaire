@@ -2,13 +2,13 @@
 
 	.q-back{
 
-		.q-create-head{
+		.q-detail-head{
 			input.q-edit:hover{
 					background-color: $hover-color;
 				}
 			}
 
-		.q-create-body{
+		.q-detail-body{
 			border-top: 3px solid $adder-color-dark;
 			border-bottom: 3px solid $adder-color-dark;
 

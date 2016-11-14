@@ -9,26 +9,21 @@
   cursor: default;
   transition: background-color 0.2s linear, opacity 0.2s linear; }
 
-.btn-default {
+.btn-enable {
   color: white;
   background-color: #f9a646;
-  border: 1px solid #f3843e; }
-  .btn-default:hover {
-    opacity: 0.8; }
-  .btn-default:active {
+  border: 1px solid #f3843e;
+  transition: background-color 0.2s liear; }
+  .btn-enable:hover {
+    background-color: white;
+    color: #393939; }
+  .btn-enable:active {
     background-color: #f3843e; }
 
-.btn-transp {
+.btn-disable {
   color: #393939;
   background-color: white;
   border: 1px solid #393939; }
-  .btn-transp:hover, .btn-transp:active {
-    color: white; }
-  .btn-transp:hover {
-    background-color: #393939; }
-  .btn-transp:active {
-    background-color: grey;
-    border-color: grey; }
 
 .btn-adder {
   background-color: #dddddd;
@@ -91,9 +86,9 @@ body {
   margin: 0;
   padding: 0; }
 
-#app .q-back .q-create-head {
+#app .q-back .q-detail-head {
   text-align: center; }
-  #app .q-back .q-create-head input.q-edit {
+  #app .q-back .q-detail-head input.q-edit {
     display: inline-block;
     width: 100%;
     font-size: 1.2em;
@@ -101,45 +96,45 @@ body {
     height: 3em;
     text-align: center; }
 
-#app .q-back .q-create-body {
+#app .q-back .q-detail-body {
   margin: 2em 0;
   padding: 0 1.5em; }
-  #app .q-back .q-create-body .q-item {
+  #app .q-back .q-detail-body .q-item {
     margin: 4em 0;
     padding: 1em; }
-    #app .q-back .q-create-body .q-item .q-item-seq span {
+    #app .q-back .q-detail-body .q-item .q-item-seq span {
       margin-right: 1em; }
-    #app .q-back .q-create-body .q-item .q-item-body input.q-edit {
+    #app .q-back .q-detail-body .q-item .q-item-body input.q-edit {
       font-size: 1em;
       height: 1.5em; }
-    #app .q-back .q-create-body .q-item .q-item-body > div:first-child {
+    #app .q-back .q-detail-body .q-item .q-item-body > div:first-child {
       margin: 1em 0; }
-      #app .q-back .q-create-body .q-item .q-item-body > div:first-child span {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:first-child span {
         padding: 0 1em;
         display: inline-block;
         float: right; }
-    #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul {
+    #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul {
       padding: 0 5em; }
-      #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul li {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li {
         margin: 0.5em; }
-        #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul li * {
+        #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li * {
           margin: 0 1em; }
-      #app .q-back .q-create-body .q-item .q-item-body > div:last-child ul textarea {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul textarea {
         outline: none;
         width: 80%;
         height: 10em;
         resize: none; }
-    #app .q-back .q-create-body .q-item .q-item-ctrl {
+    #app .q-back .q-detail-body .q-item .q-item-ctrl {
       text-align: right; }
-      #app .q-back .q-create-body .q-item .q-item-ctrl a {
+      #app .q-back .q-detail-body .q-item .q-item-ctrl a {
         padding: 0 0.5em; }
-  #app .q-back .q-create-body .q-adder {
+  #app .q-back .q-detail-body .q-adder {
     position: relative;
     overflow: hidden;
     margin: 1.5em 0;
     height: 5em;
     transition: height 0.2s linear; }
-    #app .q-back .q-create-body .q-adder ul {
+    #app .q-back .q-detail-body .q-adder ul {
       position: absolute;
       top: 0;
       width: 100%;
@@ -148,24 +143,24 @@ body {
       height: 0;
       text-align: center;
       line-height: 5em; }
-      #app .q-back .q-create-body .q-adder ul li {
+      #app .q-back .q-detail-body .q-adder ul li {
         display: inline-block;
         margin: 0 1em; }
-    #app .q-back .q-create-body .q-adder div {
+    #app .q-back .q-detail-body .q-adder div {
       position: absolute;
       bottom: 0;
       width: 100%;
       text-align: center;
       height: 5em;
       line-height: 5em; }
-  #app .q-back .q-create-body .q-adder:hover {
+  #app .q-back .q-detail-body .q-adder:hover {
     height: 10em; }
 
-#app .q-back .q-create-foot {
+#app .q-back .q-detail-foot {
   overflow: hidden; }
-  #app .q-back .q-create-foot div {
+  #app .q-back .q-detail-foot div {
     display: inline-block; }
-  #app .q-back .q-create-foot a.btn {
+  #app .q-back .q-detail-foot a.btn {
     float: right;
     margin-left: 0.5em; }
 
@@ -194,17 +189,17 @@ body {
     #app table tbody td.q-pending {
       color: #66DD00; }
 
-#app .q-back .q-create-head input.q-edit:hover {
+#app .q-back .q-detail-head input.q-edit:hover {
   background-color: #edd5d1; }
 
-#app .q-back .q-create-body {
+#app .q-back .q-detail-body {
   border-top: 3px solid #aaaaaa;
   border-bottom: 3px solid #aaaaaa; }
-  #app .q-back .q-create-body .q-item:hover {
+  #app .q-back .q-detail-body .q-item:hover {
     background-color: #edd5d1; }
-    #app .q-back .q-create-body .q-item:hover .q-edit {
+    #app .q-back .q-detail-body .q-item:hover .q-edit {
       background-color: #edd5d1; }
-  #app .q-back .q-create-body .q-adder {
+  #app .q-back .q-detail-body .q-adder {
     border: 1px solid #aaaaaa; }
-    #app .q-back .q-create-body .q-adder div {
+    #app .q-back .q-detail-body .q-adder div {
       background-color: #dddddd; }

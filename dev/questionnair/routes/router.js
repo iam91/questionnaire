@@ -27,7 +27,9 @@ router.post('/qnair', function(req, res){
 router.put('/qnair/:id', function(req, res){
 	var id = req.params.id;
 	var q = req.body;
-	res.json(q);
+	qnair.updateById(function(err, ret){
+		res.json(ret);
+	}, id, q);
 });
 
 router.delete('/qnair/:id', function(req, res){

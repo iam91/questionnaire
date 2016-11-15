@@ -1,4 +1,4 @@
-define(['jquery', 'app/components/qtable'], function($, qtable){
+define(['jquery', 'qtable'], function($, qtable){
 
 	//render functions
 	function hasQnair(data){
@@ -50,7 +50,6 @@ define(['jquery', 'app/components/qtable'], function($, qtable){
 			method: 'GET'
 		
 		}).done(function(data){
-		 	
 		 	if(data && data.length){
 		 		hasQnair(data);
 		 	}else{

@@ -1,0 +1,175 @@
+//mixin
+@mixin user-select($select){
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+}
+
+@mixin arrow($w, $h, $c, $hc, $d){
+	width: 0;
+	height: 0;
+	border: $w/2 solid transparent;
+	border-#{$d}: $h solid $c;
+	&:hover{
+		border-#{$d}-color: $hc;
+	}
+}
+
+@mixin main_border($color, $radius){
+	border: 1px solid $color;
+	border-radius: $radius;
+}
+
+//variables
+$zindex-max: 2147483647;
+
+$font-stack: 'Microsoft YaHei';
+
+$height: 1.2em;
+$width: 16em;
+
+//layout
+.z-date{
+	display: inline-block !important;
+	position: relative;
+	margin: 0 1em;
+
+	div.z-d-show{
+		display: block !important;
+		input{
+			width: $width;
+			height: $height;
+			line-height: $height;
+			text-align: center;
+		}
+	}
+
+	//calendar pad
+	div.z-d-pad{
+		display: block !important;
+		position: absolute;
+		top: $height;
+		left: 0;
+		box-sizing: border-box;
+
+		height: 0;
+		visibility: hidden;
+		overflow: hidden;
+
+		width: $width;
+		z-index: $zindex-max;
+		padding: 0 1em;
+		margin: 5px 0;
+		text-align: center;
+		div.z-d-head{
+			margin: 1em 0;
+			*{
+				display: inline-block;
+			}
+			padding: 2px;
+			vertical-align: top;
+
+			$arrow-w: 12px;
+			$arrow-h: 10px;
+
+			span.z-d-prev{
+				@include arrow($arrow-w, $arrow-h, $theme-color, $theme-color-dark, right);
+				display: inline-block;
+			}
+			span.z-d-next{
+				@include arrow($arrow-w, $arrow-h, $theme-color, $theme-color-dark, left);
+				display: inline-block;
+			}
+			input{
+				padding: 0 2px;
+				margin: 0 5px;
+
+				&.z-d-m{
+					width: 1.5em;
+				}
+				&.z-d-y{
+					width: 3em;
+				}
+			}
+		}
+		div.z-d-cal{
+			cursor: pointer;
+			div{
+				margin: 0.5em 0;
+				span{
+					@include user-select(none);
+					width: 2em;
+					display: inline-block;
+				}
+			}
+		}
+	}
+	div.z-d-spread{
+		height: auto;
+		visibility: visible;
+	}
+}
+
+//theme
+.z-date{
+	font-family: $font-stack;
+	//text box showing selected dates
+	div.z-d-show{
+		input{
+			@include main_border($main-grey, 3px);
+			font-size: 16px;
+			outline: none;
+			color: $main-grey;
+			&:hover{
+				border-color: $theme-color-dark;
+				color: $theme-color-dark;
+			}
+		}
+	}
+
+	//calendar pad
+	div.z-d-pad{
+		@include main_border($main-grey, 5px);
+		background-color: white;
+		div.z-d-head{
+			input{
+				outline: none;
+				border: 1px solid transparent;
+				font-size: 12px;
+				font-weight: lighter;
+				color: $main-grey;
+				&:hover{
+					@include main_border($theme-color-dark, 2px);
+					color: $theme-color-dark;
+				}
+			}
+		}
+		div.z-d-cal{
+			div{
+				font-size: 14px;
+				span{
+					color: $main-black;
+					transition: background-color 0.2s linear;
+				}
+				&.z-d-cal-h span{
+					color: #d81d18;
+				}
+				&.z-d-cal-b span:hover{
+					font-weight: bold;
+				}
+			}
+			.z-d-not-in{
+				color: $main-grey;
+			}
+			.z-d-ran{
+				background-color: $theme-color;
+			}
+			.z-d-ter{
+				border-radius: 2px;
+				background-color: $theme-color-dark;
+				color: white;
+			}
+		}
+	}
+}

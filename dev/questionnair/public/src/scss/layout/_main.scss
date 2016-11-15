@@ -3,6 +3,7 @@ body{
 	overflow: scroll;
 	
 	.q-header{
+		z-index: $zindex-max;
 		position: fixed;
 		top: 0;
 		width: 100%;

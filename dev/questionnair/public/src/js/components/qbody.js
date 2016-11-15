@@ -21,7 +21,7 @@ define(['jquery'], function($){
 	};
 
 	//removable
-	var questCtrl = '<input type="checkbox"><label>此题是否必填</label>';
+	var questCtrl = '<input type="checkbox" {checked}><label>此题是否必填</label>';
 	var selectCtrl = '<a name="addopt">+</a>';
 
 	var editableTitle = '<input class="q-edit" type="text" value="{title}" placeholder="这里是标题">' + 
@@ -31,7 +31,7 @@ define(['jquery'], function($){
 					  '<a name="delopt">&times;</a>';
 
 	var uneditableOpt = '<label>{opt}</label>';
-	var uneditableTitle = '<label>{title}</label>';
+	var uneditableTitle = '<label>{title}</label><label class="q-required">{required}</label>';
 
 	var ctrlTemplate = '<a name="up">上移</a>' + 
 					   '<a name="down">下移</a>' + 
@@ -80,24 +80,19 @@ define(['jquery'], function($){
 				var that = e.data.that;
 				var target = e.target;
 				var name = target.name;
-				if(name === 'add'){
 
-				}else if(name === 'del' 
+				if(name === 'del' 
 					  || name === 'up' 
 					  || name === 'down' 
 					  || name === 'clone'){
-
-					var q = $(target).parent()
-									 .parent();
-
+					//edit items
+					var q = $(target).parent().parent();
 					var seq = $(q).data('seq');
-
 					that['_' + name].call(that, q, seq);
-
 				}else if(name === '0'
 					  || name === '1'
 					  || name === '2'){
-
+					//add items
 					that._createQ(parseInt(name));
 				}
 			});
@@ -124,10 +119,8 @@ define(['jquery'], function($){
 		$(num).addClass('q-item-seq')
 			  .html(seqTemplate.replace('{seq}', seq)
 							   .replace('{type}', Qtype[type]));
-
 		//content part
 		var content = (new QContent(type, this._editable, data)).getElem();
-
 		//controll part
 		var ctrl = null;
 		if(this._editable){
@@ -135,7 +128,6 @@ define(['jquery'], function($){
 			$(ctrl).addClass('q-item-ctrl')
 				   .html(ctrlTemplate);
 		}
-
 		//assemble
 		$(q).addClass('q-item')
 			.append(num)
@@ -219,6 +211,35 @@ define(['jquery'], function($){
 		return this._base;
 	};
 
+	Qcreator.prototype.itemValidate = function(){
+		if(this._editable){
+			var curr = $(this._base).children().first();
+
+			while(!$(curr).is(this._adder)){
+
+				var title = $(curr).find('.q-item-body input[type="text"]').val().trim();
+				if(title === ''){
+					return false;
+				}
+				var type = RQtype[$(curr).find('.q-item-seq span:last-child').html()];
+				var opts = $(curr).find('.q-item-body li input[type="text"]').toArray();
+				if(type != QTYPE.QUEST){
+					for(var i = 0; i < opts.length; i++){
+						var des = $(opts[i]).val().trim();
+						if(des === ''){
+							return false;
+						}
+					}
+				}
+
+				curr = $(curr).next();
+			}
+			return true;
+		}else{
+			return false;
+		}
+	};
+
 	Qcreator.prototype.getItems = function(){
 		var items = [];
 		if(this._editable){
@@ -236,6 +257,9 @@ define(['jquery'], function($){
 					for(var i = 0; i < opts.length; i++){
 						content.opts.push({des: $(opts[i]).val().trim()});
 					}
+				}else{
+					content.required 
+						= $(curr).find('.q-item-body input[type="checkbox"]').prop('checked');
 				}
 
 				items.push({
@@ -261,12 +285,15 @@ define(['jquery'], function($){
 		this._editable = editable;
 		this._base = document.createElement('div');
 
-		this._contentTemplate = contentTemplate.replace('{}', editable ? editableTitle : uneditableTitle);
+		this._contentTemplate = contentTemplate.replace('{}', editable ? editableTitle 
+																	   : uneditableTitle.replace('{required}', data && data.content.required ? ' *' : ''));
 		this._optTemplate = optTemplate.replace('{}', editable ? editableOpt : uneditableOpt);
 
 		$(this._base).addClass('q-item-body')
 					 .html(this._contentTemplate.replace('{title}', data && data.title || '')
-								 		  		.replace('{ctrl}', type === QTYPE.QUEST ? questCtrl :  selectCtrl));
+								 		  		.replace('{ctrl}', type === QTYPE.QUEST 
+								 		  			? questCtrl.replace('{checked}', data && data.content.checked ? 'checked' : '') 
+								 		  			: selectCtrl));
 
 		this._contentBody = $(this._base).find('ul');
 

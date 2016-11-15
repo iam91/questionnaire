@@ -1,4 +1,4 @@
-define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
+define(['jquery', 'qnairserv'], function($, QnairServ){
 
 	var thead = '<tr><td></td>' + 
 				'{title}' + 
@@ -24,7 +24,13 @@ define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 	var status = {
 		'0': '未发布',
 		'1': '发布中',
-		'2': '已发布'
+		'2': '已结束'
+	}
+
+	var opBtn = {
+		'0': '查看问卷',
+		'1': '填写问卷',
+		'2': '查看数据'
 	}
 
 	var STATUS = {
@@ -36,6 +42,7 @@ define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 	function Qtable($globalStorage){
 
 		this.$globalStorage = $globalStorage;
+		this._modal = this.$globalStorage.modal;
 
 		this._table = document.createElement('table');
 		this._thead = document.createElement('thead');
@@ -58,6 +65,50 @@ define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 		this._q = [];
 	}
 
+	Qtable.prototype._delSingle = function(data){
+		var index = data.index;
+		var target = data.target;
+
+		var id = this._q[index]._id;
+		QnairServ.del(id)
+				 .done((function(that){
+						 	return function(data){
+							 	if(!data){
+								 	$(target).parents('tr').remove();
+							 	}
+							}
+						})(this)
+				 )
+				 .fail();
+	};
+
+	Qtable.prototype._delBatch = function(){
+		var checked = $(this._tbody)
+							.find('tr input[type="checkbox"]:checked')
+							.parents('tr').toArray();
+		var id = [];
+		for(var i = 0; i < checked.length; i++){
+			var index = $(checked[i]).data('index');
+			id.push(this._q[index]._id);
+		}
+		QnairServ.del(id)
+				 .done((function(that){
+				 			return function(data){
+							 	if(!data){
+							 		var checked = $(that._tbody)
+							 			.find('tr input[type="checkbox"]:checked')
+										.parents('tr').toArray();
+									for(var i = 0; i < checked.length; i++){
+										var index = $(checked[i]).data('index');
+										$(checked[i]).remove();
+									}
+							 	}
+							}
+						})(this)
+				 )
+				 .fail();
+	};
+
 	Qtable.prototype._opHandler = function(e){
 		var target = e.target;
 		var name = target.name;
@@ -66,37 +117,14 @@ define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 			var index = $(target).parents('tr').data('index');
 			switch(name){
 				case 'sing-del':
-					var id = this._q[index]._id;
-					QnairServ.del(id)
-							 .done((function(that){
-									 	return function(data){
-										 	if(!data){
-											 	$(target).parents('tr').remove();
-										 	}
-							 }})(this))
-							 .fail();
+					this._modal.setContent('确认删除该问卷？');
+					this._modal.show();
+					this._modal.setConfirm(this._delSingle, this, {index: index, target: target});
 					break;
 				case 'batch-del':
-					var checked = $(this._tbody).find('tr input[type="checkbox"]:checked')
-										  .parents('tr').toArray();
-					var id = [];
-					for(var i = 0; i < checked.length; i++){
-						var index = $(checked[i]).data('index');
-						id.push(this._q[index]._id);
-					}
-					QnairServ.del(id)
-							 .done((function(that){
-							 			return function(data){
-										 	if(!data){
-										 		var checked = $(that._tbody).find('tr input[type="checkbox"]:checked')
-													  .parents('tr').toArray();
-												for(var i = 0; i < checked.length; i++){
-													var index = $(checked[i]).data('index');
-													$(checked[i]).remove();
-												}
-										 	}
-							 }})(this))
-							 .fail();
+					this._modal.setContent('确认删除被选中问卷？');
+					this._modal.show();
+					this._modal.setConfirm(this._delBatch, this);
 					break;
 				case 'qcreate':
 				case 'qfill':
@@ -157,12 +185,12 @@ define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 
 			var statusCode = data[i].status;
 
-			t += (statusCode == STATUS.RELEASED ? '<td class="q-pending">' : '<td>') + status[statusCode] + '</td>';
+			t += (statusCode == STATUS.RELEASING ? '<td class="q-pending">' : '<td>') + status[statusCode] + '</td>';
 
 			$(row).html(trow.replace('{enable}', statusCode == STATUS.UNRELEASE ? 'btn-enable' : 'btn-disable')
 							.replace('{val}', t)
 							.replace('{name}', statusCode == STATUS.RELEASED ? 'qdata' : 'qfill')
-							.replace('{btn}', statusCode == STATUS.RELEASED ? '查看数据' : '查看问卷'))
+							.replace('{btn}', opBtn[statusCode]))
 				  .data('index', i)
 				  .appendTo(this._tbody);
 		}

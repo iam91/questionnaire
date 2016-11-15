@@ -3,21 +3,42 @@ requirejs.config({
 	baseUrl: 'javascripts/lib',
 	
 	paths: {
-		app: '../../src/js',
+		'app'       : '../../src/js',
+		//components
+		'qtable'    : '../../src/js/components/qtable',
+		'qbody'     : '../../src/js/components/qbody',
+		'zmodal'    : '../../src/js/components/zmodal',
+		'zdate'     : '../../src/js/components/zdate',
+		//service
+		'qnairserv' : '../../src/js/service/qnairserv'
+	},
+
+	shim: {
+		'zmodal': {
+			exports: 'zm'
+		},
+
+		'zdate': {
+			deps: ['jquery'],
+			exports: 'zd'
+		} 
 	}
 	
 });
 
-define(['jquery', 'app/qcreate/ctrl', 
-				  'app/qlist/ctrl', 
-				  'app/qdata/ctrl',
-				  'app/qfill/ctrl'], function($, qcreate, 
-				  								 qlist, 
-				  								 qdata,
-				  								 qfill){
+define(['jquery', 'zmodal', 'app/qcreate/ctrl', 
+						   'app/qlist/ctrl', 
+						   'app/qdata/ctrl',
+						   'app/qfill/ctrl'], function($, zmodal, qcreate, 
+						   								  		 qlist, 
+						  								  		 qdata,
+						  								  		 qfill){
 
 	var $globalStorage = {};
 	var $root = $('#app');
+
+	var modal = zmodal('.z-modal');
+	$globalStorage.modal = modal;
 
 	function router(){
 		route[predir].destroy();
@@ -28,7 +49,7 @@ define(['jquery', 'app/qcreate/ctrl',
 
 	//register pages
 	var route = {
-		'default' : qlist,
+		'default' : qcreate,
 		//'default' : qcreate,
 		'qlist'   : qlist,
 		'qcreate' : qcreate,

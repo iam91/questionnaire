@@ -77,4 +77,22 @@ Qnair.prototype.deleteById = function(callback, qid){
 		});
 }
 
+Qnair.prototype.updateById = function(callback, qid, data){
+	MongoClient.connect('mongodb://' + 
+		settings.host + ':' + 
+		settings.port + '/' + 
+		settings.db, 
+		function(err, db){
+			var collection = db.collection('qnairs');
+			collection.updateOne({_id: new ObjectID(qid)}, {$set: data}, function(err, r){
+				if(!err){
+					callback(err, data);
+				}else{
+					callback(err, null);
+				}
+		    	db.close();
+		    });
+		});
+}
+
 module.exports = new Qnair();

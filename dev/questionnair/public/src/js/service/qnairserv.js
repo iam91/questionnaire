@@ -30,7 +30,7 @@ define(['jquery'], function($){
 	function del(id){
 		var url = '/qnair/';
 		for(var i = 0; i < id.length; i++){
-			url += (id[i] + i == id.length -1 ? '' : ',');
+			url += (id[i] + i == id.length - 1 ? '' : ',');
 		}
 		return $.ajax('/qnair/' + id, {
 			method: 'DELETE',

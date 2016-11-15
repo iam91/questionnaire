@@ -14,7 +14,9 @@
 
 
 			.q-item{
-
+				.q-required{
+					color: red;
+				}
 				&:hover{
 					background-color: $hover-color;
 					.q-edit{

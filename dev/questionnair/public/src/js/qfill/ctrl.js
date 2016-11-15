@@ -1,10 +1,17 @@
-define(['jquery', 'app/components/qbody', 'app/service/qnairserv'], function($, qbody, QnairServ){
+define(['jquery', 'qbody', 'qnairserv'], function($, qbody, QnairServ){
+
+	var STATUS = {
+		'UNRELEASE': 0,
+		'RELEASING': 1,
+		'RELEASED' : 2
+	}
 
 	var qfootTemplate = '<span>问卷截止日期</span><div></div>' + 
 						'<a class="btn btn-disable" name="qlist">保存问卷</a>';
 
 	//render functions
 	function renderQnair(data){
+		_storable = data.status == STATUS.RELEASING;
 		var back = document.createElement('div');
 		//questionnair head
 		var qhead = $(document.createElement('div')).addClass('q-detail-head')
@@ -41,6 +48,7 @@ define(['jquery', 'app/components/qbody', 'app/service/qnairserv'], function($, 
 
 	var _$root = null;
 	var _$globalStorage = null;
+	var _storable = true;
 
 	function run($root, $globalStorage){
 

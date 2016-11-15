@@ -17,7 +17,7 @@
 	transition: background-color 0.2s liear;
 	&:hover{
 		background-color: white;
-		color: $font-color;
+		color: $theme-color-dark;
 	}
 	&:active{
 		background-color: $theme-color-dark;

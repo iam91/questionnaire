@@ -1,4 +1,4 @@
-define(['jquery'], function($){
+define(['jquery', 'app/service/qnairserv'], function($, QnairServ){
 
 	var thead = '<tr><td></td>' + 
 				'{title}' + 
@@ -8,7 +8,7 @@ define(['jquery'], function($){
 	var trow = '<td><input type="checkbox"></td>' + 
 			   '{val}' + 
 			   '<td><a class="btn {enable}" name="qcreate">编辑</a></td>' + 
-			   '<td><a class="btn btn-enable">删除</a></td>' + 
+			   '<td><a class="btn btn-enable" name="sing-del">删除</a></td>' + 
 			   '<td><a class="btn btn-enable" name="{name}">{btn}</a></td>';
 
 	var tfootTemplate = '<td>' + 
@@ -18,7 +18,7 @@ define(['jquery'], function($){
 							'<span>全选</span>' + 
 						'</td>' + 
 						'<td class="q-table-delete">' + 
-							'<a class="btn btn-disable">删除</a>' + 
+							'<a class="btn btn-disable" name="batch-del">删除</a>' + 
 						'</td>';
 
 	var status = {
@@ -60,12 +60,53 @@ define(['jquery'], function($){
 
 	Qtable.prototype._opHandler = function(e){
 		var target = e.target;
+		var name = target.name;
 		if($(target).hasClass('btn-enable')){
 
 			var index = $(target).parents('tr').data('index');
-
-			this.$globalStorage.qid = this._q[index]._id;
-			location.hash = '#' + e.target.name;
+			switch(name){
+				case 'sing-del':
+					var id = this._q[index]._id;
+					QnairServ.del(id)
+							 .done((function(that){
+									 	return function(data){
+										 	if(!data){
+											 	$(target).parents('tr').remove();
+										 	}
+							 }})(this))
+							 .fail();
+					break;
+				case 'batch-del':
+					var checked = $(this._tbody).find('tr input[type="checkbox"]:checked')
+										  .parents('tr').toArray();
+					var id = [];
+					for(var i = 0; i < checked.length; i++){
+						var index = $(checked[i]).data('index');
+						id.push(this._q[index]._id);
+					}
+					QnairServ.del(id)
+							 .done((function(that){
+							 			return function(data){
+										 	if(!data){
+										 		var checked = $(that._tbody).find('tr input[type="checkbox"]:checked')
+													  .parents('tr').toArray();
+												for(var i = 0; i < checked.length; i++){
+													var index = $(checked[i]).data('index');
+													$(checked[i]).remove();
+												}
+										 	}
+							 }})(this))
+							 .fail();
+					break;
+				case 'qcreate':
+				case 'qfill':
+					var id = this._q[index]._id;
+					this.$globalStorage.qid = id;
+					location.hash = '#' + name;
+					break;
+				default:
+					break;
+			};
 		}
 	};
 

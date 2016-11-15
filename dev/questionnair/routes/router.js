@@ -5,23 +5,36 @@ var qnair = require('../models/qnair');
 var router = express.Router();
 
 router.get('/qnair', function(req, res){
-	//query all questionnairs
 	qnair.getAll(function(err, docs){
-		res.send(JSON.stringify(docs));
+		res.json(docs);
 	});
 });
 
 router.get('/qnair/:id', function(req, res){
-	//query a questionnair in detail
 	var qid = req.params.id;
 	qnair.getById(function(err, doc){
-		res.send(JSON.stringify(doc));
+		res.json(doc);
 	}, qid);
 });
-/*
-router.post('/qnair', function(req, res){
 
+router.post('/qnair', function(req, res){
+	var q = req.body;
+	qnair.insert(function(err, ret){
+		res.json(ret);
+	}, q);
 });
-*/
+
+router.put('/qnair/:id', function(req, res){
+	var id = req.params.id;
+	var q = req.body;
+	res.json(q);
+});
+
+router.delete('/qnair/:id', function(req, res){
+	var id = req.params.id;
+	qnair.deleteById(function(err){
+		res.json(err);
+	}, id);
+});
 
 module.exports = router;

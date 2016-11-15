@@ -1,8 +1,7 @@
-define(['jquery', 'app/components/qbody'], function($, qbody){
+define(['jquery', 'app/components/qbody', 'app/service/qnairserv'], function($, qbody, QnairServ){
 
 	var qfootTemplate = '<span>问卷截止日期</span><div></div>' + 
-						'<a class="btn {enable}" name="qlist">发布问卷</a>' + 
-						'<a class="btn {enable}" name="qlist">保存问卷</a>';
+						'<a class="btn btn-disable" name="qlist">保存问卷</a>';
 
 	//render functions
 	function renderQnair(data){
@@ -15,14 +14,14 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		//questionnair foot
 		var qfoot = document.createElement('div');
 		$(qfoot).addClass('q-detail-foot')
-				.html(qfootTemplate.replace(/\{enable\}/g, data ? 'btn-enable' : 'btn-disable'))
+				.html(qfootTemplate)
 				.on('click', function(e){
 					var target = e.target;
 				});
 
 		//questionnair body
-		var qbdy = qbody.create(data, false)
-							  .getElem();
+		var qbdyIns = qbody.create(data, false);
+		var qbdy = qbdyIns.getElem();
 
 		$(back).addClass('q-back q-back-white')
 			   .append(qhead)
@@ -40,17 +39,6 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		$(back).addClass('q-back q-back-white').html('<span>Oops!</span>');
 	}
 
-	//query
-	function query(_id){
-
-		$.ajax('/qnair/' + _id, {
-
-			dataType: 'json',
-			method: 'GET'
-
-		}).done(existQnair).fail(noQnair);
-	}
-
 	var _$root = null;
 	var _$globalStorage = null;
 
@@ -61,7 +49,9 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 
 		var qid = _$globalStorage.qid;
 		if(qid){
-			query(qid);
+			QnairServ.query(qid)
+					 .done(existQnair)
+					 .fail(noQnair);
 		}
 	}
 

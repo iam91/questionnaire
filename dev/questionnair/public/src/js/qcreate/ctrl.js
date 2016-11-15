@@ -1,11 +1,19 @@
-define(['jquery', 'app/components/qbody'], function($, qbody){
+define(['jquery', 'app/components/qbody', 'app/service/qnairserv'], function($, qbody, QnairServ){
+
+	var STATUS = {
+		'UNRELEASE': 0,
+		'RELEASING': 1,
+		'RELEASED' : 2
+	}
 
 	var qfootTemplate = '<span>问卷截止日期</span><div></div>' + 
-						'<a class="btn {enable}" name="qlist">发布问卷</a>' + 
-						'<a class="btn {enable}" name="qlist">保存问卷</a>';
+						'<a class="btn {release-enable}" name="release">发布问卷</a>' + 
+						'<a class="btn {save-enable}" name="save">保存问卷</a>';
 
 	//render functions
 	function renderQnair(data){
+		var id = data && data._id || null;
+
 		var back = document.createElement('div');
 		//questionnair head
 		var qhead = $(document.createElement('div')).addClass('q-detail-head')
@@ -14,17 +22,40 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 												   	.val(data && data.title || '')
 												   	.parent();
 
+		//questionnair body
+		var qbdyIns = qbody.create(data, true);
+		var qbdy = qbdyIns.getElem();
+
 		//questionnair foot
 		var qfoot = document.createElement('div');
 		$(qfoot).addClass('q-detail-foot')
-				.html(qfootTemplate.replace(/\{enable\}/g, data ? 'btn-enable' : 'btn-disable'))
-				.on('click', function(e){
+				.html(qfootTemplate.replace('{release-enable}', data && data.status == 0 ? 'btn-enable' : 'btn-disable')
+								   .replace('{save-enable}', data ? 'btn-enable' : 'btn-disable'))
+				.on('click', {qbdyIns: qbdyIns}, function(e){
 					var target = e.target;
-				});
+					var name = target.name;
+					var qbdyIns = e.data.qbdyIns;
 
-		//questionnair body
-		var qbdy = qbody.create(data, true)
-							  .getElem();
+					var title = $(qhead).find('input[type="text"]').val().trim();
+					var status = data && data.status || STATUS.UNRELEASE;
+					var items = qbdyIns.getItems();
+					
+					var newData = {
+						items: items,
+						title: title,
+						status: status
+					};
+					if(name === 'release'){
+						newData.status = STATUS.RELEASED;
+					}
+					if(data){
+						QnairServ.update(newData, data._id).done().fail();
+					}else{
+						QnairServ.create(newData).done().fail();
+					}
+
+					//location.hash = '#qlist';
+				});
 
 		$(back).addClass('q-back q-back-white')
 			   .append(qhead)
@@ -41,17 +72,6 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 		renderQnair();
 	}
 
-	//query
-	function query(_id){
-
-		$.ajax('/qnair/' + _id, {
-
-			dataType: 'json',
-			method: 'GET'
-
-		}).done(existQnair).fail(newQnair);
-	}
-
 	var _$root = null;
 	var _$globalStorage = null;
 
@@ -62,7 +82,10 @@ define(['jquery', 'app/components/qbody'], function($, qbody){
 
 		var qid = _$globalStorage.qid;
 		if(qid){
-			query(qid);
+			QnairServ.query(qid)
+					 .done(existQnair)
+					 .fail(newQnair);
+
 		}else{
 			//new questionnair
 			newQnair();

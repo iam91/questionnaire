@@ -2,6 +2,12 @@ define(['jquery'], function($){
 
 	var Qtype = ['单选题','多选题','文本题'];
 
+	var RQtype = {
+		'单选题': 0,
+		'多选题': 1,
+		'文本题': 2
+	};
+
 	var STATUS = {
 		'UNRELEASE': 0,
 		'RELEASING': 1,
@@ -61,7 +67,7 @@ define(['jquery'], function($){
 		$(this._base).addClass('q-detail-body');
 		this._adder = null;
 
-		this._addQ(qdata.items);
+		this._addQ(qdata && qdata.items);
 
 		if(this._editable){
 
@@ -213,6 +219,41 @@ define(['jquery'], function($){
 		return this._base;
 	};
 
+	Qcreator.prototype.getItems = function(){
+		var items = [];
+		if(this._editable){
+			var curr = $(this._base).children().first();
+
+			while(!$(curr).is(this._adder)){
+
+				var type = RQtype[$(curr).find('.q-item-seq span:last-child').html()];
+				var title = $(curr).find('.q-item-body input[type="text"]').val().trim();
+				var opts = $(curr).find('.q-item-body li input[type="text"]').toArray();
+
+				var content = {};
+				if(type != QTYPE.QUEST){
+					content.opts = [];
+					for(var i = 0; i < opts.length; i++){
+						content.opts.push({des: $(opts[i]).val().trim()});
+					}
+				}
+
+				items.push({
+					type: type,
+					title: title,
+					content: content
+				});
+
+				curr = $(curr).next();
+			}
+			return items;
+		}
+	}
+
+	Qcreator.prototype.getData = function(){
+
+	}
+
 
 
 
@@ -229,18 +270,26 @@ define(['jquery'], function($){
 
 		this._contentBody = $(this._base).find('ul');
 
-		if(type === QTYPE.SINGL && data){
-
-			for(var i = 0; i < data.content.opts.length; i++){
-				this._createOpt(type, data.content.opts[i].des);
+		if(type === QTYPE.SINGL){
+			if(data){
+				for(var i = 0; i < data.content.opts.length; i++){
+					this._createOpt(type, data.content.opts[i].des);
+				}
+			}else{
+				for(var i = 0; i < 2; i++){
+					this._createOpt(type, '');
+				}
 			}
-
-		}else if(type === QTYPE.MULTI && data){
-
-			for(var i = 0; i < data.content.opts.length; i++){
-				this._createOpt(type, data.content.opts[i].des);
+		}else if(type === QTYPE.MULTI){
+			if(data){
+				for(var i = 0; i < data.content.opts.length; i++){
+					this._createOpt(type, data.content.opts[i].des);
+				}
+			}else{
+				for(var i = 0; i < 2; i++){
+					this._createOpt(type, '');
+				}
 			}
-
 		}else if(type === QTYPE.QUEST){
 
 			var text = document.createElement('textarea');

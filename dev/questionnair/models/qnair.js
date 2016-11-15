@@ -1,49 +1,80 @@
-var mongodb = require('./db');
+var settings = require('./settings');
 var ObjectID = require('mongodb').ObjectID;
+var MongoClient = require('mongodb').MongoClient;
 
 function Qnair(qnair){
 }
 
 Qnair.prototype.getAll = function(callback){
-	this._get(callback);
-};
-
-Qnair.prototype.getById = function(callback, qid){
-	this._get(callback, qid, true);
-};
-
-Qnair.prototype._get = function(callback, qid, detail){
-
-    mongodb.open(function(err, db){
-
-        if(err){
-        	console.log('open err');
-            return callback(err);
-        }
-
-		db.collection('qnairs', function(err, collection){
-		    if(err){
-		    	console.log('collection err');
-		        mongodb.close();
-				return callback(err);
-	    	}
-
-	    	var cond = qid ? {_id: new ObjectID(qid)} : {};
-	    	var proj = detail ? {} : {items: false};
-
-	    	console.log(cond);
-	    	console.log(proj);
-
-		    collection.find(cond, proj).toArray(function(err, doc){
-		    	mongodb.close();
+	MongoClient.connect('mongodb://' + 
+		settings.host + ':' + 
+		settings.port + '/' + 
+		settings.db, 
+		function(err, db){
+			var collection = db.collection('qnairs');
+			collection.find({}, {items: false}).toArray(function(err, doc){
 				if(doc){
 				    callback(err, doc);
 				}else{
-				    callback(err, null);
+				    callback(err, []);
 				}
+		    	db.close();
 		    });
 		});
-    });
 };
+
+Qnair.prototype.getById = function(callback, qid){
+	MongoClient.connect('mongodb://' + 
+		settings.host + ':' + 
+		settings.port + '/' + 
+		settings.db, 
+		function(err, db){
+			var collection = db.collection('qnairs');
+			collection.find({_id: new ObjectID(qid)}, {}).toArray(function(err, doc){
+				if(doc){
+				    callback(err, doc);
+				}else{
+				    callback(err, []);
+				}
+		    	db.close();
+		    });
+		});
+};
+
+Qnair.prototype.insert = function(callback, data){
+	MongoClient.connect('mongodb://' + 
+		settings.host + ':' + 
+		settings.port + '/' + 
+		settings.db, 
+		function(err, db){
+			var collection = db.collection('qnairs');
+			collection.insertOne(data, function(err, r){
+				if(!err){
+					callback(err, data);
+				}else{
+					callback(err, null);
+				}
+		    	db.close();
+		    });
+		});
+}
+
+Qnair.prototype.deleteById = function(callback, qid){
+	MongoClient.connect('mongodb://' + 
+		settings.host + ':' + 
+		settings.port + '/' + 
+		settings.db, 
+		function(err, db){
+			var collection = db.collection('qnairs');
+			var obId = qid.split(',').map(function(id){
+				return new ObjectID(id);
+			});
+			
+			collection.deleteMany({_id: {$in: obId}}, function(err, r){
+				callback(err);
+		    	db.close();
+		    });
+		});
+}
 
 module.exports = new Qnair();

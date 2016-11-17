@@ -4,13 +4,16 @@ requirejs.config({
 	
 	paths: {
 		'app'       : '../../src/js',
+		
 		//components
 		'qtable'    : '../../src/js/components/qtable',
 		'qbody'     : '../../src/js/components/qbody',
 		'zmodal'    : '../../src/js/components/zmodal',
 		'zdate'     : '../../src/js/components/zdate',
+
 		//service
-		'qnairserv' : '../../src/js/service/qnairserv'
+		'qnairserv' : '../../src/js/service/qnairserv',
+		'qdataserv' : '../../src/js/service/qdataserv'
 	},
 
 	shim: {
@@ -27,49 +30,43 @@ requirejs.config({
 });
 
 define(['jquery', 'zmodal', 'app/qcreate/ctrl', 
-						   'app/qlist/ctrl', 
-						   'app/qdata/ctrl',
-						   'app/qfill/ctrl'], function($, zmodal, qcreate, 
-						   								  		 qlist, 
-						  								  		 qdata,
-						  								  		 qfill){
-
+						    'app/qlist/ctrl', 
+						    'app/qdata/ctrl',
+						    'app/qfill/ctrl'], function($, zmodal, qcreate, 
+						   								  		   qlist, 
+						  								  		   qdata,
+						  								  		   qfill){
 	var $globalStorage = {};
 	var $root = $('#app');
 
 	var modal = zmodal('.z-modal');
 	$globalStorage.modal = modal;
 
+	var indexPage = '#qlist';
+
 	function router(){
-		route[predir].destroy();
-		predir = location.hash.replace('#', '');
-		predir = predir === '' ? 'default' : predir;
-		route[predir].run($root, $globalStorage);
+		$($root).empty();
+		route[location.hash].render($root, $globalStorage);
 	}
 
 	//register pages
 	var route = {
-		'default' : qcreate,
-		//'default' : qcreate,
-		'qlist'   : qlist,
-		'qcreate' : qcreate,
-		'qdata'   : qdata,
-		'qfill'   : qfill,
+		'#qlist'   : qlist,
+		'#qcreate' : qcreate,
+		'#qdata'   : qdata,
+		'#qfill'   : qfill,
 	};
 
 	/** procedure **/
-
 	
-	location.hash = '';
-	var predir = 'default';
-	
-	router();
-
 	//monitor route change
 	$(window).on('hashchange', function(e){
-
 		router();
-		
 	});
-	
+
+	if(location.hash === indexPage){
+		//when reload qlist page, manually trigger router();
+		router();
+	}
+	location.hash = indexPage;
 });

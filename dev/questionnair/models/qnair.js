@@ -5,36 +5,50 @@ var MongoClient = require('mongodb').MongoClient;
 function Qnair(qnair){
 }
 
-Qnair.prototype.getAll = function(callback){
+Qnair.prototype._connect = function(fn){
 	MongoClient.connect('mongodb://' + 
 		settings.host + ':' + 
 		settings.port + '/' + 
-		settings.db, 
-		function(err, db){
-			var collection = db.collection('qnairs');
-			collection.find({}, {items: false}).toArray(function(err, doc){
-				if(doc){
-				    callback(err, doc);
+		settings.db, fn);
+};
+
+Qnair.prototype.getAll = function(callback){
+	this._connect(function(err, db){
+		var collection = db.collection('qnairs');
+		//update expiration
+		collection.updateMany(
+			{ 
+				endTime: { $lt:  new Date()}, 
+				status: 1 
+			}, 
+			{ $set:  { status: 2 } }, 
+			{}, 
+			function(err, r){
+				if(!err){
+					collection.find({}, {items: false}).toArray(function(err, doc){
+						if(err){
+							callback(err, []);
+						}else{
+							callback(err, doc);
+						}
+						db.close();
+					});
 				}else{
-				    callback(err, []);
+					callback(err, []);
+					db.close();
 				}
-		    	db.close();
-		    });
+			});
 		});
 };
 
 Qnair.prototype.getById = function(callback, qid){
-	MongoClient.connect('mongodb://' + 
-		settings.host + ':' + 
-		settings.port + '/' + 
-		settings.db, 
-		function(err, db){
+	this._connect(function(err, db){
 			var collection = db.collection('qnairs');
-			collection.find({_id: new ObjectID(qid)}, {}).toArray(function(err, doc){
-				if(doc){
-				    callback(err, doc);
+			collection.find({_id: new ObjectID(qid)}, {}).toArray(function(err, data){
+				if(err){
+				    callback(err);
 				}else{
-				    callback(err, []);
+				    callback(err, data);
 				}
 		    	db.close();
 		    });
@@ -42,17 +56,13 @@ Qnair.prototype.getById = function(callback, qid){
 };
 
 Qnair.prototype.insert = function(callback, data){
-	MongoClient.connect('mongodb://' + 
-		settings.host + ':' + 
-		settings.port + '/' + 
-		settings.db, 
-		function(err, db){
+	this._connect(function(err, db){
 			var collection = db.collection('qnairs');
 			collection.insertOne(data, function(err, r){
 				if(!err){
-					callback(err, data);
+					callback(err);
 				}else{
-					callback(err, null);
+					callback(err);
 				}
 		    	db.close();
 		    });
@@ -60,11 +70,7 @@ Qnair.prototype.insert = function(callback, data){
 }
 
 Qnair.prototype.deleteById = function(callback, qid){
-	MongoClient.connect('mongodb://' + 
-		settings.host + ':' + 
-		settings.port + '/' + 
-		settings.db, 
-		function(err, db){
+	this._connect(function(err, db){
 			var collection = db.collection('qnairs');
 			var obId = qid.split(',').map(function(id){
 				return new ObjectID(id);
@@ -78,17 +84,13 @@ Qnair.prototype.deleteById = function(callback, qid){
 }
 
 Qnair.prototype.updateById = function(callback, qid, data){
-	MongoClient.connect('mongodb://' + 
-		settings.host + ':' + 
-		settings.port + '/' + 
-		settings.db, 
-		function(err, db){
+	this._connect(function(err, db){
 			var collection = db.collection('qnairs');
 			collection.updateOne({_id: new ObjectID(qid)}, {$set: data}, function(err, r){
 				if(!err){
-					callback(err, data);
+					callback(err);
 				}else{
-					callback(err, null);
+					callback(err);
 				}
 		    	db.close();
 		    });

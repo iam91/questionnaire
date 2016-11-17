@@ -31,7 +31,7 @@ define(['jquery'], function($){
 					  '<a name="delopt">&times;</a>';
 
 	var uneditableOpt = '<label>{opt}</label>';
-	var uneditableTitle = '<label>{title}</label><label class="q-required">{required}</label>';
+	var uneditableTitle = '<label>{title}</label><label class="{q-required}">{required}</label>';
 
 	var ctrlTemplate = '<a name="up">上移</a>' + 
 					   '<a name="down">下移</a>' + 
@@ -274,8 +274,56 @@ define(['jquery'], function($){
 		}
 	}
 
-	Qcreator.prototype.getData = function(){
+	Qcreator.prototype.dataValidate = function(){
+		var cnt = 0;
+		var curr = $(this._base).children().first();
 
+		while($(curr).length){
+
+			var type = RQtype[$(curr).find('.q-item-seq span:last-child').html()];
+			if(type == QTYPE.SINGL 
+				&& $(curr).find('.q-item-body li input[type="radio"]:checked').length == 0){
+				return cnt + ' 单选题为空！';
+			}else if(type == QTYPE.QUEST 
+				&& $(curr).find('.q-item-body .q-required').length
+				&& $(curr).find('.q-item-body textarea').val() === ''){
+				return cnt + ' 必填题为空！';
+			}
+
+			curr = $(curr).next();
+			cnt++;
+		}
+		return null;
+	};
+
+	Qcreator.prototype.getData = function(){
+		var items = [];
+		var curr = $(this._base).children().first();
+		while($(curr).length){
+
+			var type = RQtype[$(curr).find('.q-item-seq span:last-child').html()];
+			content = [];
+			if(type == QTYPE.SINGL){
+				var opts = $(curr).find('.q-item-body li input[type="radio"]').toArray();
+				
+				for(var i = 0; i < opts.length; i++){
+					content.push($(opts[i]).prop('checked') ? 1 : 0);
+				}
+			}else if(type == QTYPE.MULTI){
+				var opts = $(curr).find('.q-item-body li input[type="checkbox"]').toArray();
+				
+				for(var i = 0; i < opts.length; i++){
+					content.push($(opts[i]).prop('checked') ? 1 : 0);
+				}
+			}else if(type ==  QTYPE.QUEST){
+				content = [$(curr).find('.q-item-body textarea').val() === '' ? 0 : 1];
+			}
+
+			items.push(content);
+
+			curr = $(curr).next();
+		}
+		return items;
 	}
 
 
@@ -286,7 +334,8 @@ define(['jquery'], function($){
 		this._base = document.createElement('div');
 
 		this._contentTemplate = contentTemplate.replace('{}', editable ? editableTitle 
-																	   : uneditableTitle.replace('{required}', data && data.content.required ? ' *' : ''));
+																	   : uneditableTitle.replace('{required}', data && data.content.required ? ' *' : '')
+																	   					.replace('{q-required}', data && data.content.required ? 'q-required' : ''));
 		this._optTemplate = optTemplate.replace('{}', editable ? editableOpt : uneditableOpt);
 
 		$(this._base).addClass('q-item-body')

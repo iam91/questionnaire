@@ -1,8 +1,7 @@
-define(['jquery', 'qtable'], function($, qtable){
+define(['jquery', 'qtable', 'qnairserv'], function($, qtable, QnairServ){
 
 	//render functions
 	function hasQnair(data){
-
 		var createBtn = $(document.createElement('a'))
 							.html('新建问卷')
 							.attr('name', 'qcreate')
@@ -41,24 +40,6 @@ define(['jquery', 'qtable'], function($, qtable){
 			   .appendTo(_$root);
 	}
 
-	//query	
-	function query(){
-
-		$.ajax('/qnair', {
-
-			dataType: 'json',
-			method: 'GET'
-		
-		}).done(function(data){
-		 	if(data && data.length){
-		 		hasQnair(data);
-		 	}else{
-		 		noQnair();
-		 	}
-
-		}).fail(noQnair);
-	}
-
 	//meta data for model
 	var title = [
 		'title',
@@ -74,20 +55,21 @@ define(['jquery', 'qtable'], function($, qtable){
 	var _$root = null;
 	var _$globalStorage = null;
 
-	function run($root, $globalStorage){
+	function render($root, $globalStorage){
 
 		_$root = $root;
 		_$globalStorage = $globalStorage;
 
-		query();
-	}
-
-	function destroy(){
-		$(_$root).empty();
+		QnairServ.query().done(function(data){
+		 	if(data && data.length){
+		 		hasQnair(data);
+		 	}else{
+		 		noQnair();
+		 	}
+		}).fail(noQnair);
 	}
 
 	return {
-		run     : run,
-		destroy : destroy
+		render: render
 	};
 });

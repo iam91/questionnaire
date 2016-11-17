@@ -1,7 +1,7 @@
 define(['jquery'], function($){
 
 	function query(id){
-		return $.ajax('/qnair/' + id || '', {
+		return $.ajax('/qnair/' + (id || ''), {
 			dataType: 'json',
 			method: 'GET'
 		});

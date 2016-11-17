@@ -92,6 +92,8 @@
 		this._calStartElem = null;
 		this._calEndElem = null;
 
+		this._rangeEnable = true;
+
 		this._selStart = param 
 			&& (
 					Util.dateStandardize(param.sel, this._currCal) 
@@ -316,35 +318,39 @@
 	};
 
 	ZDate.prototype._setRangeSel = function(e){
-		var target = e.target;
-		var sel = this._getSelDate(target);
-		var startTime = this._selStart.getTime();
-		var endTime = this._selEnd.getTime();
-		var midTime = (startTime + endTime) / 2;
-		var curTime = sel.getTime();
-		//reset time
-		var selStart = curTime <= midTime ? sel : this._selStart;
-		var selEnd = curTime > midTime ? sel : this._selEnd;
-		
-		var dayRange = (selEnd.getTime() - selStart.getTime()) / MILLISECOND_DAY + 1;
-		if(this._max > 0 && dayRange > this._max){
-			alert('Should be no more than ' + this._max + '!');
-			return;
+		if(this._rangeEnable){
+			var target = e.target;
+			var sel = this._getSelDate(target);
+			var startTime = this._selStart.getTime();
+			var endTime = this._selEnd.getTime();
+			var midTime = (startTime + endTime) / 2;
+			var curTime = sel.getTime();
+			//reset time
+			var selStart = curTime <= midTime ? sel : this._selStart;
+			var selEnd = curTime > midTime ? sel : this._selEnd;
+			
+			var dayRange = (selEnd.getTime() - selStart.getTime()) / MILLISECOND_DAY + 1;
+			if(this._max > 0 && dayRange > this._max){
+				alert('Should be no more than ' + this._max + '!');
+				return;
+			}
+			if(dayRange < this._min){
+				alert('Should be no less than ' + this._min + '!');
+				return;
+			}
+
+			this._selStart = selStart;
+			this._selEnd = selEnd;
+
+			this._selStartElem = curTime <= midTime ? target : this._selStartElem;
+			this._selEndElem = curTime > midTime ? target : this._selEndElem;
+
+			this._renderShow();
+			this._clearSel();
+			this._renderSel();
+		}else{
+			this._setSingleSel(e);
 		}
-		if(dayRange < this._min){
-			alert('Should be no less than ' + this._min + '!');
-			return;
-		}
-
-		this._selStart = selStart;
-		this._selEnd = selEnd;
-
-		this._selStartElem = curTime <= midTime ? target : this._selStartElem;
-		this._selEndElem = curTime > midTime ? target : this._selEndElem;
-
-		this._renderShow();
-		this._clearSel();
-		this._renderSel();
 	}
 
 	ZDate.prototype._setSingleSel = function(e){
@@ -384,11 +390,19 @@
 		}
 	};
 
+	ZDate.prototype.dateRectify = function(d){
+		return Util.dateStandardize(d, this._currCal);
+	}
+
+	ZDate.prototype.enableRange = function(en){
+		this._rangeEnable = en;
+	};
+
 	/**
 	 * Expose it to global environment
 	 */
 	function zd(q, param){
-		var d = $(q);console.log(q);console.log(d)
+		var d = $(q);
 		/**
 		 * Multiple z-dates found, wrap the first one.
 		 */

@@ -23,19 +23,22 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 		};
 		if(d.name === 'release'){
 			newData.status = STATUS.RELEASING;
+			newData.endTime = _endTime.getDates().sel;
 		}
 		if(d.data){
 			QnairServ.update(newData, d.data._id).done(function(data){
-				if(data){
-					backToList();
-				}
+				location.hash = '#qlist';
+			}).fail(function(){
+				_modal.setContent('服务器内部错误，可能没有保存哦！');
+				_modal.show();
 			});
 		}else{
 			newData.createTime = new Date();
 			QnairServ.create(newData).done(function(data){
-				if(data){
-					backToList();	
-				}
+				location.hash = '#qlist';
+			}).fail(function(){
+				_modal.setContent('服务器内部错误，可能没有发布哦！');
+				_modal.show();
 			});
 		}
 	}
@@ -46,11 +49,12 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 
 		var back = document.createElement('div');
 		//questionnair head
-		var qhead = $(document.createElement('div')).addClass('q-detail-head')
-													.html('<input class="q-edit" type="text" placeholder="这里是标题">')
-												   	.children()
-												   	.val(data && data.title || '')
-												   	.parent();
+		var qhead = $(document.createElement('div'))
+						.addClass('q-detail-head')
+						.html('<input class="q-edit" type="text" placeholder="这里是标题">')
+						.children()
+						.val(data && data.title || '')
+						.parent();
 
 		//questionnair body
 		var qbdyIns = qbody.create(data, true);
@@ -70,10 +74,16 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 
 					var title = $(qhead).find('input[type="text"]').val().trim();
 
+					var curr = _endTime.dateRectify(new Date());
+					var sel = _endTime.getDates().sel;
+
 					//validation
 					if(title === '' || !qbdyIns.itemValidate()){console.log('fail')
 						//validation fails
 						_modal.setContent('问卷不完整！');
+						_modal.show();
+					}else if(name === 'release' && sel.getTime() <= curr.getTime()){
+						_modal.setContent('时间不可倒流！');
 						_modal.show();
 					}else if(name === 'release' && data && data.status != STATUS.UNRELEASE){
 						_modal.setContent('不可重复发布！');
@@ -98,6 +108,7 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 			   .appendTo(_$root);
 
 		_endTime = zdate('.z-date');
+		_endTime.enableRange(false);
 	}
 
 	function existQnair(data){
@@ -113,7 +124,7 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 	var _modal = null;
 	var _endTime = null;
 
-	function run($root, $globalStorage){
+	function render($root, $globalStorage){
 
 		_$root = $root;
 		_$globalStorage = $globalStorage;
@@ -124,21 +135,13 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 			QnairServ.query(qid)
 					 .done(existQnair)
 					 .fail(newQnair);
-
 		}else{
 			//new questionnair
 			newQnair();
 		}
 	}
 
-	function destroy(){
-
-		$(_$root).empty();
-
-	}
-
 	return {
-		run     : run,
-		destroy : destroy
+		render: render
 	};
 });

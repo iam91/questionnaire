@@ -7,12 +7,12 @@
 }
 
 @mixin arrow($w, $h, $c, $hc, $d){
-	width: 0;
-	height: 0;
-	border: $w/2 solid transparent;
-	border-#{$d}: $h solid $c;
+	width: 0 !important;
+	height: 0 !important;
+	border: $w/2 solid transparent !important;
+	border-#{$d}: $h solid $c !important;
 	&:hover{
-		border-#{$d}-color: $hc;
+		border-#{$d}-color: $hc !important;
 	}
 }
 
@@ -32,82 +32,86 @@ $width: 16em;
 //layout
 .z-date{
 	display: inline-block !important;
-	position: relative;
-	margin: 0 1em;
+	position: relative !important;
+
+	*{
+		margin: 0 !important;
+		padding: 0 !important;
+	}
 
 	div.z-d-show{
 		display: block !important;
 		input{
-			width: $width;
-			height: $height;
-			line-height: $height;
-			text-align: center;
+			width: $width !important;
+			height: $height !important;
+			line-height: $height !important;
+			text-align: center !important;
 		}
 	}
 
 	//calendar pad
 	div.z-d-pad{
 		display: block !important;
-		position: absolute;
-		top: $height;
-		left: 0;
-		box-sizing: border-box;
+		position: absolute !important;
+		top: $height + 0.3em !important;
+		left: 0 !important;
+		box-sizing: border-box !important;
 
-		height: 0;
+		height: 0!important;
 		visibility: hidden;
 		overflow: hidden;
 
-		width: $width;
-		z-index: $zindex-max;
-		padding: 0 1em;
-		margin: 5px 0;
-		text-align: center;
+		width: $width !important;
+		z-index: $zindex-max !important;
+		padding: 0 1em !important;
+		margin: 5px 0 !important;
+		text-align: center !important;
 		div.z-d-head{
-			margin: 1em 0;
+			margin: 1em 0 !important;
 			*{
-				display: inline-block;
+				display: inline-block !important;
 			}
-			padding: 2px;
-			vertical-align: top;
+			padding: 2px !important;
+			vertical-align: top !important;
 
-			$arrow-w: 12px;
-			$arrow-h: 10px;
+			$arrow-w: 12px !important;
+			$arrow-h: 10px !important;
 
 			span.z-d-prev{
 				@include arrow($arrow-w, $arrow-h, $theme-color, $theme-color-dark, right);
-				display: inline-block;
+				display: inline-block !important;
 			}
 			span.z-d-next{
 				@include arrow($arrow-w, $arrow-h, $theme-color, $theme-color-dark, left);
-				display: inline-block;
+				display: inline-block !important;
 			}
 			input{
-				padding: 0 2px;
-				margin: 0 5px;
+				padding: 0 2px !important;
+				margin: 0 5px !important;
 
 				&.z-d-m{
-					width: 1.5em;
+					width: 1.5em !important;
 				}
 				&.z-d-y{
-					width: 3em;
+					width: 3em !important;
 				}
 			}
 		}
 		div.z-d-cal{
-			cursor: pointer;
+			cursor: pointer !important;
 			div{
-				margin: 0.5em 0;
+				margin: 0.5em 0 !important;
 				span{
 					@include user-select(none);
-					width: 2em;
-					display: inline-block;
+					width: 2em !important;
+					display: inline-block !important;
 				}
 			}
 		}
 	}
 	div.z-d-spread{
-		height: auto;
-		visibility: visible;
+		height: auto !important;
+		visibility: visible !important;
 	}
 }
 
@@ -156,7 +160,7 @@ $width: 16em;
 					color: #d81d18;
 				}
 				&.z-d-cal-b span:hover{
-					font-weight: bold;
+					color: $theme-color-dark;
 				}
 			}
 			.z-d-not-in{

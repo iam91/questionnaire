@@ -1,4 +1,4 @@
-define(['jquery', 'qbody', 'qnairserv'], function($, qbody, QnairServ){
+define(['jquery', 'qbody', 'qnairserv', 'qdataserv'], function($, qbody, QnairServ, QdataServ){
 
 	var STATUS = {
 		'UNRELEASE': 0,
@@ -6,29 +6,63 @@ define(['jquery', 'qbody', 'qnairserv'], function($, qbody, QnairServ){
 		'RELEASED' : 2
 	}
 
-	var qfootTemplate = '<span>问卷截止日期</span><div></div>' + 
-						'<a class="btn btn-disable" name="qlist">保存问卷</a>';
+	var qfootTemplate = '<span>问卷截止日期</span><div>{endTime}</div>' + 
+						'<a class="btn {enable}" name="qlist">保存问卷</a>';
+
+	function saveData(d){
+		var data = d.data;
+		var qbdyIns = d.qbdyIns;
+
+		var newData = {
+			qid: data._id,
+			items: qbdyIns.getData()
+		}
+		
+		QdataServ.create(newData).done(function(data){
+			if(data){
+				location.hash = '#qlist';
+			}
+		}).fail(function(){
+			_modal.setContent('服务器内部错误，可能没有保存哦！');
+			_modal.show();
+		});
+	}
 
 	//render functions
 	function renderQnair(data){
-		_storable = data.status == STATUS.RELEASING;
+		//can be filled while releasing
+		_canfill = data.status == STATUS.RELEASING;
+		var endTime = data.endTime;
+
 		var back = document.createElement('div');
 		//questionnair head
 		var qhead = $(document.createElement('div')).addClass('q-detail-head')
 													.html('<span>' + data.title + '</span>');
-												   	
-
-		//questionnair foot
-		var qfoot = document.createElement('div');
-		$(qfoot).addClass('q-detail-foot')
-				.html(qfootTemplate)
-				.on('click', function(e){
-					var target = e.target;
-				});
 
 		//questionnair body
 		var qbdyIns = qbody.create(data, false);
 		var qbdy = qbdyIns.getElem();
+
+		//questionnair foot
+		var qfoot = document.createElement('div');
+		$(qfoot).addClass('q-detail-foot')
+				.html(qfootTemplate.replace('{enable}', _canfill ? 'btn-enable' : 'btn-disable')
+								   .replace('{endTime}', endTime))
+				.on('click', function(e){
+					var target = e.target;
+					if(_canfill){
+						//getdata
+						var r = qbdyIns.dataValidate();
+						if(r){
+							_modal.setContent(r);
+							_modal.show();
+						}else{
+							_modal.setContent('确认保存？');
+							_modal.setConfirm(saveData, null, {data: data, qbdyIns: qbdyIns});
+							_modal.show();
+						}
+					}
+				});
 
 		$(back).addClass('q-back q-back-white')
 			   .append(qhead)
@@ -48,29 +82,26 @@ define(['jquery', 'qbody', 'qnairserv'], function($, qbody, QnairServ){
 
 	var _$root = null;
 	var _$globalStorage = null;
-	var _storable = true;
+	var _modal = null;
+	var _canfill = true;
 
-	function run($root, $globalStorage){
+	function render($root, $globalStorage){
 
 		_$root = $root;
 		_$globalStorage = $globalStorage;
+		_modal = _$globalStorage.modal;
 
 		var qid = _$globalStorage.qid;
 		if(qid){
 			QnairServ.query(qid)
 					 .done(existQnair)
 					 .fail(noQnair);
+		}else{
+			noQnair();
 		}
 	}
 
-	function destroy(){
-
-		$(_$root).empty();
-
-	}
-
 	return {
-		run     : run,
-		destroy : destroy
+		render: render
 	};
 });

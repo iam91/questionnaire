@@ -25,19 +25,25 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 		'0': '未发布',
 		'1': '发布中',
 		'2': '已结束'
+	};
+
+	var statusHTML = {
+		'0': '<td>',
+		'1': '<td class="q-releasing">',
+		'2': '<td class="q-released">'
 	}
 
 	var opBtn = {
 		'0': '查看问卷',
 		'1': '填写问卷',
 		'2': '查看数据'
-	}
+	};
 
 	var STATUS = {
 		'UNRELEASE': 0,
 		'RELEASING': 1,
 		'RELEASED' : 2
-	}
+	};
 
 	function Qtable($globalStorage){
 
@@ -75,6 +81,10 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 						 	return function(data){
 							 	if(!data){
 								 	$(target).parents('tr').remove();
+								 	/////
+								 	if($(that._tbody).children().length == 0){
+								 		location.reload();
+								 	}
 							 	}
 							}
 						})(this)
@@ -102,6 +112,10 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 										var index = $(checked[i]).data('index');
 										$(checked[i]).remove();
 									}
+									/////
+								 	if($(that._tbody).children().length == 0){
+								 		location.reload();
+								 	}
 							 	}
 							}
 						})(this)
@@ -128,6 +142,7 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 					break;
 				case 'qcreate':
 				case 'qfill':
+				case 'qdata':
 					var id = this._q[index]._id;
 					this.$globalStorage.qid = id;
 					location.hash = '#' + name;
@@ -185,7 +200,7 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 
 			var statusCode = data[i].status;
 
-			t += (statusCode == STATUS.RELEASING ? '<td class="q-pending">' : '<td>') + status[statusCode] + '</td>';
+			t += statusHTML[statusCode] + status[statusCode] + '</td>';
 
 			$(row).html(trow.replace('{enable}', statusCode == STATUS.UNRELEASE ? 'btn-enable' : 'btn-disable')
 							.replace('{val}', t)

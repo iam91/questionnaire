@@ -225,7 +225,7 @@ body {
     @media screen and (min-width: 321px) and (max-width: 414px) {
       body #app .q-back {
         width: 90%;
-        padding: 2em 0; } }
+        padding: 2em 1rem; } }
     @media screen and (min-width: 414px) and (max-width: 768px) {
       body #app .q-back {
         width: 70%;

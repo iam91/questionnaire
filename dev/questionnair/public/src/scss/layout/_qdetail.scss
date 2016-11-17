@@ -23,6 +23,19 @@
 			margin: 2em 0;
 			padding: 0 1.5em;
 
+			.q-ctrl{
+				cursor: default;
+				font-size: 1.2em;
+				&:hover{
+					color: red;
+					font-weight: bold;
+				}
+				&:active{
+					color: red;
+					font-weight: lighter;
+				}
+			}
+
 			.q-item{
 				margin: 4em 0;
 				padding: 1em;
@@ -34,6 +47,11 @@
 					input.q-edit{
 						font-size: 1em;
 						height: 1.5em;
+						border: 1px dotted transparent;
+						padding: 0 1em;
+						&:hover{
+							border-color: $theme-color;
+						}
 					}
 
 					&>div:first-child{

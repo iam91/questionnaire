@@ -22,21 +22,21 @@ define(['jquery'], function($){
 
 	//removable
 	var questCtrl = '<input type="checkbox" {checked}><label>此题是否必填</label>';
-	var selectCtrl = '<a name="addopt">+</a>';
+	var selectCtrl = '<a class="q-ctrl" name="addopt">+</a>';
 
 	var editableTitle = '<input class="q-edit" type="text" value="{title}" placeholder="这里是标题">' + 
 						'<span>{ctrl}</span>';
 
 	var editableOpt = '<input class="q-edit" type="text" value="{opt}" placeholder="请输入选项">' + 
-					  '<a name="delopt">&times;</a>';
+					  '<a class="q-ctrl" name="delopt">&times;</a>';
 
 	var uneditableOpt = '<label>{opt}</label>';
 	var uneditableTitle = '<label>{title}</label><label class="{q-required}">{required}</label>';
 
-	var ctrlTemplate = '<a name="up">上移</a>' + 
-					   '<a name="down">下移</a>' + 
-					   '<a name="clone">复用</a>' + 
-					   '<a name="del">删除</a>';
+	var ctrlTemplate = '<a class="q-ctrl" name="up">上移</a>' + 
+					   '<a class="q-ctrl" name="down">下移</a>' + 
+					   '<a class="q-ctrl" name="clone">复用</a>' + 
+					   '<a class="q-ctrl" name="del">删除</a>';
 
 	var adderTemplate = '';
 	for(var i = 0; i < Qtype.length; i++){
@@ -341,7 +341,7 @@ define(['jquery'], function($){
 		$(this._base).addClass('q-item-body')
 					 .html(this._contentTemplate.replace('{title}', data && data.title || '')
 								 		  		.replace('{ctrl}', type === QTYPE.QUEST 
-								 		  			? questCtrl.replace('{checked}', data && data.content.checked ? 'checked' : '') 
+								 		  			? questCtrl.replace('{checked}', data && data.content.required ? 'checked' : '') 
 								 		  			: selectCtrl));
 
 		this._contentBody = $(this._base).find('ul');

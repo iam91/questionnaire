@@ -18,7 +18,7 @@ Qnair.prototype.getAll = function(callback){
 		//update expiration
 		collection.updateMany(
 			{ 
-				endTime: { $lt:  new Date()}, 
+				endTime: { $lt: new Date()}, 
 				status: 1 
 			}, 
 			{ $set:  { status: 2 } }, 
@@ -58,6 +58,10 @@ Qnair.prototype.getById = function(callback, qid){
 Qnair.prototype.insert = function(callback, data){
 	this._connect(function(err, db){
 			var collection = db.collection('qnairs');
+
+			data.createTime = new Date(data.createTime);
+			data.endTime = new Date(data.endTime);
+
 			collection.insertOne(data, function(err, r){
 				if(!err){
 					callback(err);

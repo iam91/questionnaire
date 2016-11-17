@@ -129,16 +129,16 @@ div.z-modal {
       .z-date div.z-d-pad div.z-d-head span.z-d-prev {
         width: 0 !important;
         height: 0 !important;
-        border: 12px !important/2 solid transparent !important;
-        border-right: 10px !important solid #f9a646 !important;
+        border: 6px solid transparent !important;
+        border-right: 10px solid #f9a646 !important;
         display: inline-block !important; }
         .z-date div.z-d-pad div.z-d-head span.z-d-prev:hover {
           border-right-color: #f3843e !important; }
       .z-date div.z-d-pad div.z-d-head span.z-d-next {
         width: 0 !important;
         height: 0 !important;
-        border: 12px !important/2 solid transparent !important;
-        border-left: 10px !important solid #f9a646 !important;
+        border: 6px solid transparent !important;
+        border-left: 10px solid #f9a646 !important;
         display: inline-block !important; }
         .z-date div.z-d-pad div.z-d-head span.z-d-next:hover {
           border-left-color: #f3843e !important; }
@@ -266,6 +266,15 @@ body {
 #app .q-back .q-detail-body {
   margin: 2em 0;
   padding: 0 1.5em; }
+  #app .q-back .q-detail-body .q-ctrl {
+    cursor: default;
+    font-size: 1.2em; }
+    #app .q-back .q-detail-body .q-ctrl:hover {
+      color: red;
+      font-weight: bold; }
+    #app .q-back .q-detail-body .q-ctrl:active {
+      color: red;
+      font-weight: lighter; }
   #app .q-back .q-detail-body .q-item {
     margin: 4em 0;
     padding: 1em; }
@@ -273,7 +282,11 @@ body {
       margin-right: 1em; }
     #app .q-back .q-detail-body .q-item .q-item-body input.q-edit {
       font-size: 1em;
-      height: 1.5em; }
+      height: 1.5em;
+      border: 1px dotted transparent;
+      padding: 0 1em; }
+      #app .q-back .q-detail-body .q-item .q-item-body input.q-edit:hover {
+        border-color: #f9a646; }
     #app .q-back .q-detail-body .q-item .q-item-body > div:first-child {
       margin: 1em 0; }
       #app .q-back .q-detail-body .q-item .q-item-body > div:first-child span {

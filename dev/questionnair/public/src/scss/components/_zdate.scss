@@ -74,8 +74,8 @@ $width: 16em;
 			padding: 2px !important;
 			vertical-align: top !important;
 
-			$arrow-w: 12px !important;
-			$arrow-h: 10px !important;
+			$arrow-w: 12px;
+			$arrow-h: 10px;
 
 			span.z-d-prev{
 				@include arrow($arrow-w, $arrow-h, $theme-color, $theme-color-dark, right);

@@ -1,4 +1,4 @@
-define(['jquery', 'qnairserv'], function($, QnairServ){
+define(['jquery', 'qnairserv', 'dateutil'], function($, QnairServ, dateutil){
 
 	var thead = '<tr><td></td>' + 
 				'{title}' + 
@@ -195,7 +195,12 @@ define(['jquery', 'qnairserv'], function($, QnairServ){
 			
 			var t = '';
 			for(var j = 0; j < title.length; j++){
-				t += '<td>' + data[i][title[j]] + '</td>';
+				var dat = data[i][title[j]];
+				var time = dateutil.dateTrans(dat);
+
+				console.log(time)
+
+				t += '<td>' + (time ? dateutil.dateFormat(time) : dat) + '</td>';
 			}
 
 			var statusCode = data[i].status;

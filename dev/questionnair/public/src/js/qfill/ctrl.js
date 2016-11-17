@@ -1,4 +1,5 @@
-define(['jquery', 'qbody', 'qnairserv', 'qdataserv'], function($, qbody, QnairServ, QdataServ){
+define(['jquery', 'qbody', 'qnairserv', 'qdataserv', 'dateutil'], 
+	function($, qbody, QnairServ, QdataServ, dateutil){
 
 	var STATUS = {
 		'UNRELEASE': 0,
@@ -32,7 +33,7 @@ define(['jquery', 'qbody', 'qnairserv', 'qdataserv'], function($, qbody, QnairSe
 	function renderQnair(data){
 		//can be filled while releasing
 		_canfill = data.status == STATUS.RELEASING;
-		var endTime = data.endTime;
+		var endTime = new Date(data.endTime);
 
 		var back = document.createElement('div');
 		//questionnair head
@@ -47,7 +48,7 @@ define(['jquery', 'qbody', 'qnairserv', 'qdataserv'], function($, qbody, QnairSe
 		var qfoot = document.createElement('div');
 		$(qfoot).addClass('q-detail-foot')
 				.html(qfootTemplate.replace('{enable}', _canfill ? 'btn-enable' : 'btn-disable')
-								   .replace('{endTime}', endTime))
+								   .replace('{endTime}', dateutil.dateFormat(endTime)))
 				.on('click', function(e){
 					var target = e.target;
 					if(_canfill){

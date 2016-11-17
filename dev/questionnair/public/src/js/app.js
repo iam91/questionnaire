@@ -4,6 +4,9 @@ requirejs.config({
 	
 	paths: {
 		'app'       : '../../src/js',
+
+		//utils
+		'dateutil'  : '../../src/js/dateutil',
 		
 		//components
 		'qtable'    : '../../src/js/components/qtable',

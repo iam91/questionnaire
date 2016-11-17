@@ -66,8 +66,16 @@ define(['jquery', 'echarts', 'qbody', 'qdataserv'], function($, echarts, qbody, 
 
 	    series: [
 	        {
+	            name: '有效',
 	            type: 'bar',
-	            data: null
+	            data: null,
+	            stack: '所有'
+	        },
+	        {
+	        	name: '无效',
+	            type: 'bar',
+	            data: null,
+	            stack: '所有'
 	        }
 	    ]
 	};
@@ -144,6 +152,7 @@ define(['jquery', 'echarts', 'qbody', 'qdataserv'], function($, echarts, qbody, 
 					chart = echarts.init(chart);
 
 					barOption.series[0].data = [data[i][0] / tot];
+					barOption.series[1].data = [(tot - data[i][0]) / tot];
 					chart.setOption(barOption);
 				}
 

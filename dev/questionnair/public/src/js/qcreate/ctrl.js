@@ -1,5 +1,6 @@
 //TODO: HANDLE QUERY RESULT
-define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, zdate){
+define(['jquery', 'qbody', 'qnairserv', 'zdate', 'dateutil'], 
+	function($, qbody, QnairServ, zdate, dateutil){
 
 	var STATUS = {
 		'UNRELEASE': 0,
@@ -21,9 +22,9 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 			items: d.qbdyIns.getItems(),
 			status: d.data && d.data.status || STATUS.UNRELEASE
 		};
+		newData.endTime = _endTime.getDates().sel;
 		if(d.name === 'release'){
 			newData.status = STATUS.RELEASING;
-			newData.endTime = _endTime.getDates().sel;
 		}
 		if(d.data){
 			QnairServ.update(newData, d.data._id).done(function(data){
@@ -74,15 +75,15 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 
 					var title = $(qhead).find('input[type="text"]').val().trim();
 
-					var curr = _endTime.dateRectify(new Date());
+					var curr = new Date();
 					var sel = _endTime.getDates().sel;
 
 					//validation
-					if(title === '' || !qbdyIns.itemValidate()){console.log('fail')
+					if(title === '' || !qbdyIns.itemValidate()){
 						//validation fails
 						_modal.setContent('问卷不完整！');
 						_modal.show();
-					}else if(name === 'release' && sel.getTime() <= curr.getTime()){
+					}else if(name === 'release' && dateutil.dateLessEqual(sel, curr)){
 						_modal.setContent('时间不可倒流！');
 						_modal.show();
 					}else if(name === 'release' && data && data.status != STATUS.UNRELEASE){
@@ -90,7 +91,8 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate'], function($, qbody, QnairServ, 
 						_modal.show();
 					}
 					else{
-						_modal.setContent(name === 'release' ? '确认发布？' : '确认保存？');
+						_modal.setContent(name === 'release' 
+							? ('确认发布？\n（截止时间：' + dateutil.dateFormat(sel) + '）') : '确认保存？');
 						_modal.setConfirm(pushQnair, null, {
 							title: title,
 							qbdyIns: qbdyIns,

@@ -3,8 +3,8 @@
 	margin: 1em;
 	padding: 1em;
 	overflow: hidden;
+	@media screen and (min-width:1050px){.q-data-text{float: left;} .q-data-chart{float: right;}}
 	.q-data-text{
-		float: left;
 		padding: 1em;
 		
 		&>div{
@@ -23,9 +23,6 @@
 				height: 2em;
 			}
 		}
-	}
-	.q-data-chart{
-		float: right;
 	}
 }
 

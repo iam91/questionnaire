@@ -1,8 +1,8 @@
 .btn {
   display: inline-block;
-  line-height: 1.5em;
-  height: 1.5em;
-  width: 5em;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  width: 5rem;
   text-align: center;
   text-decoration: none;
   border-radius: 2px;
@@ -217,13 +217,23 @@ body {
     width: 100%;
     height: 3em;
     line-height: 3em;
-    padding: 0 5em;
+    padding: 0 5rem;
     box-sizing: border-box; }
   body #app .q-back {
     border-radius: 3px;
-    width: 60%;
-    margin: 7em auto;
-    padding: 2em; }
+    margin: 7rem auto; }
+    @media screen and (min-width: 321px) and (max-width: 414px) {
+      body #app .q-back {
+        width: 90%;
+        padding: 2em 0; } }
+    @media screen and (min-width: 414px) and (max-width: 768px) {
+      body #app .q-back {
+        width: 70%;
+        padding: 2em 1rem; } }
+    @media screen and (min-width: 768px) {
+      body #app .q-back {
+        width: 60%;
+        padding: 2em 1.5rem; } }
   body #app a {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -243,10 +253,10 @@ body {
   width: 100%;
   text-align: center;
   border-collapse: collapse;
-  line-height: 3em; }
+  line-height: 3rem; }
   #app table tfoot .q-table-delete {
     text-align: left;
-    padding: 0 1em; }
+    padding: 0 1rem; }
 
 #app .q-back ul {
   list-style-type: none;
@@ -258,17 +268,25 @@ body {
   #app .q-back .q-detail-head input.q-edit {
     display: inline-block;
     width: 100%;
-    font-size: 1.2em;
-    line-height: 3em;
-    height: 3em;
+    font-size: 1.2rem;
+    line-height: 3rem;
+    height: 3rem;
     text-align: center; }
 
 #app .q-back .q-detail-body {
-  margin: 2em 0;
-  padding: 0 1.5em; }
+  margin: 2em 0; }
+  @media screen and (min-width: 321px) and (max-width: 414px) {
+    #app .q-back .q-detail-body {
+      padding: 0.5rem 0; } }
+  @media screen and (min-width: 414px) and (max-width: 768px) {
+    #app .q-back .q-detail-body {
+      padding: 0.5rem 0; } }
+  @media screen and (min-width: 768px) {
+    #app .q-back .q-detail-body {
+      padding: 1.5rem; } }
   #app .q-back .q-detail-body .q-ctrl {
     cursor: default;
-    font-size: 1.2em; }
+    font-size: 1.2rem; }
     #app .q-back .q-detail-body .q-ctrl:hover {
       color: red;
       font-weight: bold; }
@@ -276,42 +294,49 @@ body {
       color: red;
       font-weight: lighter; }
   #app .q-back .q-detail-body .q-item {
-    margin: 4em 0;
-    padding: 1em; }
+    margin: 1rem 0;
+    padding: 1rem; }
     #app .q-back .q-detail-body .q-item .q-item-seq span {
-      margin-right: 1em; }
+      margin-right: 1rem; }
     #app .q-back .q-detail-body .q-item .q-item-body input.q-edit {
-      font-size: 1em;
-      height: 1.5em;
+      font-size: 1rem;
+      height: 1.5rem;
       border: 1px dotted transparent;
-      padding: 0 1em; }
+      padding: 0 1rem; }
       #app .q-back .q-detail-body .q-item .q-item-body input.q-edit:hover {
         border-color: #f9a646; }
     #app .q-back .q-detail-body .q-item .q-item-body > div:first-child {
-      margin: 1em 0; }
+      margin: 1rem 0; }
       #app .q-back .q-detail-body .q-item .q-item-body > div:first-child span {
-        padding: 0 1em;
+        padding: 0 1rem;
         display: inline-block;
         float: right; }
-    #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul {
-      padding: 0 5em; }
-      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li {
-        margin: 0.5em; }
-        #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li * {
-          margin: 0 1em; }
-      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul textarea {
-        outline: none;
-        width: 80%;
-        height: 10em;
-        resize: none; }
+    @media screen and (min-width: 321px) and (max-width: 414px) {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul {
+        padding: 1rem 0; } }
+    @media screen and (min-width: 414px) and (max-width: 768px) {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul {
+        padding: 1rem 2rem; } }
+    @media screen and (min-width: 768px) {
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul {
+        padding: 1rem 5rem; } }
+    #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li {
+      margin: 0.5rem; }
+      #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul li * {
+        margin: 0 1rem; }
+    #app .q-back .q-detail-body .q-item .q-item-body > div:last-child ul textarea {
+      outline: none;
+      width: 80%;
+      height: 10rem;
+      resize: none; }
     #app .q-back .q-detail-body .q-item .q-item-ctrl {
       text-align: right; }
       #app .q-back .q-detail-body .q-item .q-item-ctrl a {
-        padding: 0 0.5em; }
+        padding: 0 0.5rem; }
   #app .q-back .q-detail-body .q-adder {
     position: relative;
     overflow: hidden;
-    margin: 1.5em 0;
+    margin: 1.5rem 0;
     height: 5em;
     transition: height 0.2s linear; }
     #app .q-back .q-detail-body .q-adder ul {
@@ -325,7 +350,7 @@ body {
       line-height: 5em; }
       #app .q-back .q-detail-body .q-adder ul li {
         display: inline-block;
-        margin: 0 1em; }
+        margin: 0 1rem; }
     #app .q-back .q-detail-body .q-adder div {
       position: absolute;
       bottom: 0;
@@ -338,19 +363,23 @@ body {
 
 #app .q-back .q-detail-foot div {
   display: inline-block;
-  margin: 0 1em; }
+  margin: 0 1rem; }
 
 #app .q-back .q-detail-foot a.btn {
   float: right;
-  margin-left: 0.5em; }
+  margin-left: 0.5rem; }
 
 .q-data-item {
   border: 1px solid grey;
   margin: 1em;
   padding: 1em;
   overflow: hidden; }
+  @media screen and (min-width: 1050px) {
+    .q-data-item .q-data-text {
+      float: left; }
+    .q-data-item .q-data-chart {
+      float: right; } }
   .q-data-item .q-data-text {
-    float: left;
     padding: 1em; }
     .q-data-item .q-data-text > div {
       margin: 1em 0; }
@@ -361,8 +390,6 @@ body {
     .q-data-item .q-data-text ul li {
       line-height: 2em;
       height: 2em; }
-  .q-data-item .q-data-chart {
-    float: right; }
 
 .q-data-foot {
   text-align: center; }
@@ -410,3 +437,18 @@ body {
     border: 1px solid #aaaaaa; }
     #app .q-back .q-detail-body .q-adder div {
       background-color: #dddddd; }
+
+@media screen and (max-width: 321px) {
+  html {
+    font-size: 6px; } }
+
+@media screen and (min-width: 321px) and (max-width: 414px) {
+  html {
+    font-size: 8px; } }
+
+@media screen and (min-width: 414px) and (max-width: 768px) {
+  font-size: 10px; }
+
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 16px; } }

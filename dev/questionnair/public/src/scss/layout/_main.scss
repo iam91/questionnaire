@@ -9,16 +9,17 @@ body{
 		width: 100%;
 		height: $q-head-height;
 		line-height: $q-head-height;
-		padding: 0 5em;
+		padding: 0 5rem;
 		box-sizing: border-box;
 	}
 
 	#app{
 		.q-back{
+			@media screen and (min-width:321px) and (max-width:414px){width: 90%;padding: 2em 0;}
+			@media screen and (min-width:414px) and (max-width:768px){width: 70%;padding: 2em 1rem;}
+			@media screen and (min-width:768px){width: 60%;padding: 2em 1.5rem;}
 			border-radius: 3px;
-			width: 60%;
-			margin: 7em auto;
-			padding: 2em;
+			margin: 7rem auto;
 		}
 
 		a{

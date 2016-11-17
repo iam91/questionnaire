@@ -7,8 +7,9 @@ define(['jquery', 'qbody', 'qnairserv', 'qdataserv', 'dateutil'],
 		'RELEASED' : 2
 	}
 
-	var qfootTemplate = '<span>问卷截止日期</span><div>{endTime}</div>' + 
-						'<a class="btn {enable}" name="qlist">保存问卷</a>';
+	var qfootTemplate = '<span>问卷截止日期</span><div>{endTime}</div>' +  
+						'<a class="btn {enable}" name="qlist">保存问卷</a>' +
+						'<a class="btn btn-enable" href="#qlist">< 返回</a>';
 
 	function saveData(d){
 		var data = d.data;
@@ -51,7 +52,7 @@ define(['jquery', 'qbody', 'qnairserv', 'qdataserv', 'dateutil'],
 								   .replace('{endTime}', dateutil.dateFormat(endTime)))
 				.on('click', function(e){
 					var target = e.target;
-					if(_canfill){
+					if(_canfill && target.name){
 						//getdata
 						var r = qbdyIns.dataValidate();
 						if(r){

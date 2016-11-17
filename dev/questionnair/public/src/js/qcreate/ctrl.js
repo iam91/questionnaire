@@ -8,9 +8,10 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate', 'dateutil'],
 		'RELEASED' : 2
 	}
 
-	var qfootTemplate = '<span>问卷截止日期</span><div class="z-date"></div>' + 
+	var qfootTemplate = '<span>问卷截止日期</span><div class="z-date"></div>' +
 						'<a class="btn {release-enable}" name="release">发布问卷</a>' + 
-						'<a class="btn btn-enable" name="save">保存问卷</a>';
+						'<a class="btn btn-enable" name="save">保存问卷</a>' + 
+						'<a class="btn btn-enable" href="#qlist">< 返回</a>';
 
 	function backToList(){
 		location.hash = '#qlist';
@@ -90,7 +91,7 @@ define(['jquery', 'qbody', 'qnairserv', 'zdate', 'dateutil'],
 						_modal.setContent('不可重复发布！');
 						_modal.show();
 					}
-					else{
+					else if(name){
 						_modal.setContent(name === 'release' 
 							? ('确认发布？\n（截止时间：' + dateutil.dateFormat(sel) + '）') : '确认保存？');
 						_modal.setConfirm(pushQnair, null, {

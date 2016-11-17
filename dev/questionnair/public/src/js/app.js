@@ -35,10 +35,11 @@ requirejs.config({
 define(['jquery', 'zmodal', 'app/qcreate/ctrl', 
 						    'app/qlist/ctrl', 
 						    'app/qdata/ctrl',
-						    'app/qfill/ctrl'], function($, zmodal, qcreate, 
-						   								  		   qlist, 
-						  								  		   qdata,
-						  								  		   qfill){
+						    'app/qfill/ctrl'], 
+						    function($, zmodal, qcreate, 
+						   						qlist, 
+						  						qdata,
+						  						qfill){
 	var $globalStorage = {};
 	var $root = $('#app');
 

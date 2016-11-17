@@ -147,7 +147,7 @@ define(['jquery', 'echarts', 'qbody', 'qdataserv'], function($, echarts, qbody, 
 					pieOption.series[0].data = d;
 					chart.setOption(pieOption);
 				}else{
-					chart.style.width = '400px';
+					chart.style.width = '300px';
 					chart.style.height = '150px';
 					chart = echarts.init(chart);
 

@@ -440,14 +440,15 @@ body {
 
 @media screen and (max-width: 321px) {
   html {
-    font-size: 6px; } }
+    font-size: 5px; } }
 
 @media screen and (min-width: 321px) and (max-width: 414px) {
   html {
     font-size: 8px; } }
 
 @media screen and (min-width: 414px) and (max-width: 768px) {
-  font-size: 10px; }
+  html {
+    font-size: 10px; } }
 
 @media screen and (min-width: 768px) {
   html {

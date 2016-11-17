@@ -57,7 +57,7 @@ define(['jquery'], function($){
 	var contentTemplate = '<div>{}</div>' + 
 						  '<div><ul></ul></div>';
 
-	var optTemplate = '<input type="{type}" name="{single}">{}' 
+	var optTemplate = '<input type="{type}">{}' 
 
 	function Qcreator(qdata, editable){
 		this._itemCount = 0;
@@ -120,7 +120,7 @@ define(['jquery'], function($){
 			  .html(seqTemplate.replace('{seq}', seq)
 							   .replace('{type}', Qtype[type]));
 		//content part
-		var content = (new QContent(type, this._editable, data)).getElem();
+		var content = (new QContent(type, this._editable, data, index)).getElem();
 		//controll part
 		var ctrl = null;
 		if(this._editable){
@@ -172,6 +172,9 @@ define(['jquery'], function($){
 			$(prev).data('seq', seq)
 				   .find('.q-item-seq>span:first-child')
 				   .html(seq);
+
+			$(q).find('input[type="radio"]').prop('name', seq - 1);
+			$(prev).find('input[type="radio"]').prop('name', seq);
 		}
 	};
 
@@ -188,6 +191,9 @@ define(['jquery'], function($){
 			$(next).data('seq', seq)
 				   .find('.q-item-seq>span:first-child')
 				   .html(seq);
+
+			$(q).find('input[type="radio"]').prop('name', seq + 1);
+			$(next).find('input[type="radio"]').prop('name', seq);
 		}
 	};
 
@@ -201,6 +207,9 @@ define(['jquery'], function($){
 			$(next).data('seq', currSeq + 1)
 				   .find('.q-item-seq>span:first-child')
 				   .html(currSeq + 1);
+
+			$(next).find('input[type="radio"]')
+				   .prop('name', currSeq + 1);
 
 			curr = next;
 		}
@@ -329,7 +338,8 @@ define(['jquery'], function($){
 
 
 
-	function QContent(type, editable, data){
+	function QContent(type, editable, data, itemId){
+		this._itemId = itemId;
 		this._editable = editable;
 		this._base = document.createElement('div');
 
@@ -392,9 +402,9 @@ define(['jquery'], function($){
 	QContent.prototype._createOpt = function(type, opt){
 		var optElem = document.createElement('li');
 		$(optElem).html(this._optTemplate.replace('{type}', type === 0 ? 'radio' : 'checkbox')
-								   		 .replace('{single}', type === 0 ? 'single' : '')
 										 .replace('{opt}', opt))
-			  	  .appendTo(this._contentBody);
+			  	  .appendTo(this._contentBody)
+			  	  .find('input[type="radio"]').prop('name', this._itemId);
 	};
 
 	QContent.prototype.getElem = function(){
